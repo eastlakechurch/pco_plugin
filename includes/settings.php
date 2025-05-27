@@ -307,21 +307,3 @@ function pco_events_license_key_field_html() {
     echo '<input type="text" name="pco_events_license_key" value="' . esc_attr($value) . '" style="width: 400px;">';
     echo "<p class='description'>Enter the license key provided after purchase.</p>";
 }
-
-function pco_events_mask_license_key($key) {
-    $key = trim($key);
-    if (strlen($key) <= 4) return str_repeat('*', strlen($key));
-    return str_repeat('*', strlen($key) - 4) . substr($key, -4);
-}
-
-function pco_events_settings_page() {
-    // ...existing settings page code...
-
-    // Display the license key (masked)
-    $license = get_option('pco_events_license_key');
-    if (!empty($license)) {
-        echo '<p><strong>License Key:</strong> ' . esc_html(pco_events_mask_license_key($license)) . '</p>';
-    }
-
-    // ...existing settings page code...
-}
