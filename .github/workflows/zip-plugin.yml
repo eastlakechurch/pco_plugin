@@ -16,7 +16,6 @@ jobs:
     - name: Create ZIP file
       run: |
         mkdir output
-        cd pco_plugin  # Replace with the actual folder of your plugin
         zip -r ../output/pco_plugin.zip . -x "*.git*" "*.github*" "tests/*"  # Exclude unnecessary files/folders
 
     - name: Create GitHub Release
