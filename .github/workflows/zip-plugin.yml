@@ -3,7 +3,7 @@ name: Zip and Release WordPress Plugin
 on:
   push:
     tags:
-      - 'v*.*.*'  # This will trigger on any tag like v1.0.0, v1.2.3, etc.
+      - 'v*.*.*'  # Triggers on version tags like v1.0.0
 
 jobs:
   build:
@@ -16,20 +16,14 @@ jobs:
     - name: Create ZIP file
       run: |
         mkdir output
-        zip -r ../output/pco_plugin.zip . -x "*.git*" "*.github*" "tests/*"  # Exclude unnecessary files/folders
+        zip -r output/pco_plugin.zip . -x "*.git*" "*.github*" "tests/*"
 
-    - name: Create GitHub Release
-      id: create_release
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/}
-        curl -X POST \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -d "{\"tag_name\": \"$VERSION\", \"name\": \"$VERSION\", \"body\": \"Release notes here...\"}" \
-          https://api.github.com/repos/${{ github.repository }}/releases
-
-    - name: Upload ZIP as release asset
+    - name: Create GitHub Release and Upload
       uses: softprops/action-gh-release@v1
       with:
-        files: output/your-plugin.zip
+        tag_name: ${{ github.ref_name }}
+        name: ${{ github.ref_name }}
+        body: "Automated release for version ${{ github.ref_name }}"
+        files: output/pco_plugin.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
