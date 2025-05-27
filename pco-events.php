@@ -2,16 +2,16 @@
 /*
 Plugin Name: PCO Events for WordPress
 Description: Display and filter upcoming Planning Center Calendar events in your WordPress site using shortcodes. Includes caching, tags, and recurring event support.
-Version: 1.0.0
+Version: 1.0.6
 Author: Josh Edwards
-Plugin URI: https://pcointegrations.lemonsqueezy.com
+Plugin URI: https://github.com/eastlakechurch/pco_plugin
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
 require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
 
-$myUpdateChecker = YahnisElsts\PluginUpdateChecker\v5p6\Factory::buildUpdateChecker(
+$myUpdateChecker = YahnisElsts\PluginUpdateChecker\v5p6\PucFactory::buildUpdateChecker(
     'https://raw.githubusercontent.com/eastlakechurch/pco-events-updates/main/metadata.json',
     __FILE__,
     'pco_plugin'

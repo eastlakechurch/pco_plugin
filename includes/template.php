@@ -129,5 +129,9 @@ function pco_events_render_event_card($event_instance, $included = [], $show_des
     return $output;
 }
 
-// ...where you output custom CSS...
-echo '<style>' . esc_html(get_option('pco_events_custom_css', '')) . '</style>';
+add_action('wp_head', function() {
+    $css = get_option('pco_events_custom_css', '');
+    if (!empty($css)) {
+        echo '<style>' . esc_html($css) . '</style>';
+    }
+});
