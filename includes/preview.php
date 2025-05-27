@@ -117,78 +117,98 @@ function pco_events_styles_page() {
                             <h3>Sample Event Title</h3>
                         </div>
                         <div class="event-date">
-                            <span class="recurring-label">Every Sunday, 10:00am</span><br>
-                            <span class="next-date-label">Next Date: Sun, 2 Jun</span>
+                            <span class="recurring-label" id="preview-recurring-label">Every Sunday, 10:00am</span><br>
+                            <span class="next-date-label" id="preview-next-date-label">Next Date: Sun, 2 Jun</span>
                         </div>
-                        <div class="event-tags"><span class="event-tag">featured</span></div>
+                        <div class="event-tags" id="preview-event-tags"><span class="event-tag">featured</span></div>
                         <p>This is a sample description of an event to preview your selected styles.</p>
                     </div>
                 </div>
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
-                      const preview = document.querySelector('#pco-preview-container .event');
-                      const img = preview.querySelector('img');
-                      const title = preview.querySelector('h3');
-                      const tag = preview.querySelector('.event-tag');
+                        const preview = document.querySelector('#pco-preview-container .event');
+                        const img = preview.querySelector('img');
+                        const title = preview.querySelector('h3');
+                        const tag = preview.querySelector('.event-tag');
+                        const recurringLabel = document.getElementById('preview-recurring-label');
+                        const nextDateLabel = document.getElementById('preview-next-date-label');
+                        const eventTags = document.getElementById('preview-event-tags');
 
-                      function applyStyle(field, value) {
-                        switch (field.name) {
-                          case 'pco_events_primary_color':
-                            tag.style.backgroundColor = value;
-                            break;
-                          case 'pco_events_card_background':
-                            preview.style.backgroundColor = value;
-                            break;
-                          case 'pco_events_title_color':
-                            title.style.color = value;
-                            break;
-                          case 'pco_events_font_size':
-                            preview.style.fontSize = value === 'small' ? '0.9em' : value === 'large' ? '1.2em' : '1em';
-                            break;
-                          case 'pco_events_font_family':
-                            preview.style.fontFamily = value;
-                            break;
-                          case 'pco_events_border_strength':
-                            preview.style.border = value === 'none' ? 'none' : value === 'strong' ? '2px solid #ccc' : '1px solid #e0e0e0';
-                            break;
-                          case 'pco_events_image_style':
-                            img.style.borderRadius = value === 'square' ? '0' : value === 'circle' ? '50%' : '4px';
-                            break;
-                          case 'pco_events_card_border_width':
-                            preview.style.borderWidth = value;
-                            break;
-                          case 'pco_events_card_border_radius':
-                            preview.style.borderRadius = value;
-                            break;
-                          case 'pco_events_image_padding':
-                            img.style.marginBottom = value;
-                            break;
-                          case 'pco_events_card_border_color':
-                            preview.style.borderColor = value;
-                            break;
-                          case 'pco_events_recurring_color':
-                            const recurring = preview.querySelector('.recurring-label');
-                            if (recurring) recurring.style.color = value;
-                            break;
-                          case 'pco_events_image_fill':
-                            if (value === 'true') {
-                              img.style.borderRadius = '0';
-                              img.style.display = 'block';
-                              img.style.width = 'calc(100% + 40px)';
-                              img.style.margin = '-20px -20px 0 -20px';
-                            } else {
-                              img.style.borderRadius = '<?php echo get_option('pco_events_image_style') === 'square' ? '0' : (get_option('pco_events_image_style') === 'circle' ? '50%' : '4px'); ?>';
-                              img.style.width = '100%';
-                              img.style.margin = '0 0 <?php echo esc_attr(get_option('pco_events_image_padding', '15px')); ?> 0';
+                        function applyStyle(field, value) {
+                            switch (field.name) {
+                                case 'pco_events_primary_color':
+                                    tag.style.backgroundColor = value;
+                                    break;
+                                case 'pco_events_card_background':
+                                    preview.style.backgroundColor = value;
+                                    break;
+                                case 'pco_events_title_color':
+                                    title.style.color = value;
+                                    break;
+                                case 'pco_events_font_size':
+                                    preview.style.fontSize = value === 'small' ? '0.9em' : value === 'large' ? '1.2em' : '1em';
+                                    break;
+                                case 'pco_events_font_family':
+                                    preview.style.fontFamily = value;
+                                    break;
+                                case 'pco_events_border_strength':
+                                    preview.style.border = value === 'none' ? 'none' : value === 'strong' ? '2px solid #ccc' : '1px solid #e0e0e0';
+                                    break;
+                                case 'pco_events_image_style':
+                                    img.style.borderRadius = value === 'square' ? '0' : value === 'circle' ? '50%' : '4px';
+                                    break;
+                                case 'pco_events_card_border_width':
+                                    preview.style.borderWidth = value;
+                                    break;
+                                case 'pco_events_card_border_radius':
+                                    preview.style.borderRadius = value;
+                                    break;
+                                case 'pco_events_image_padding':
+                                    img.style.marginBottom = value;
+                                    break;
+                                case 'pco_events_card_border_color':
+                                    preview.style.borderColor = value;
+                                    break;
+                                case 'pco_events_recurring_color':
+                                    if (recurringLabel) recurringLabel.style.color = value;
+                                    break;
+                                case 'pco_events_image_fill':
+                                    if (value === 'true') {
+                                        img.style.borderRadius = '0';
+                                        img.style.display = 'block';
+                                        img.style.width = 'calc(100% + 40px)';
+                                        img.style.margin = '-20px -20px 0 -20px';
+                                    } else {
+                                        img.style.borderRadius = '<?php echo get_option('pco_events_image_style') === 'square' ? '0' : (get_option('pco_events_image_style') === 'circle' ? '50%' : '4px'); ?>';
+                                        img.style.width = '100%';
+                                        img.style.margin = '0 0 <?php echo esc_attr(get_option('pco_events_image_padding', '15px')); ?> 0';
+                                    }
+                                    break;
+                                // NEW: Toggle Next Date label
+                                case 'pco_events_show_next_date':
+                                    if (nextDateLabel) nextDateLabel.style.display = value === 'yes' ? '' : 'none';
+                                    break;
+                                // NEW: Toggle Tags
+                                case 'pco_events_show_tags':
+                                    if (eventTags) eventTags.style.display = value === 'yes' ? '' : 'none';
+                                    break;
                             }
-                            break;
                         }
-                      }
 
-                      const fields = document.querySelectorAll('form select, form input[type="color"], form input[type="text"], form textarea');
-                      fields.forEach(field => {
-                        field.addEventListener('input', () => applyStyle(field, field.value));
-                      });
+                        // Initial state for toggles
+                        const nextDateToggle = document.querySelector('select[name="pco_events_show_next_date"]');
+                        if (nextDateToggle && nextDateLabel) {
+                            nextDateLabel.style.display = nextDateToggle.value === 'yes' ? '' : 'none';
+                        }
+                        const tagsToggle = document.querySelector('select[name="pco_events_show_tags"]');
+                        if (tagsToggle && eventTags) {
+                            eventTags.style.display = tagsToggle.value === 'yes' ? '' : 'none';
+                        }
+
+                        const fields = document.querySelectorAll('form select, form input[type="color"], form input[type="text"], form textarea');
+                        fields.forEach(field => {
+                            field.addEventListener('input', () => applyStyle(field, field.value));
+                        });
                     });
                 </script>
             </div>

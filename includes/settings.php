@@ -135,6 +135,38 @@ function pco_events_register_settings() {
         'pco_events_styles_section_card'
     );
 
+    // Add to "Card Styling" section for Next Date toggle
+    add_settings_field(
+        'pco_events_show_next_date',
+        'Show "Next Date" for Recurring Events',
+        function() {
+            $value = get_option('pco_events_show_next_date', 'yes');
+            echo '<select name="pco_events_show_next_date">
+                <option value="yes"' . selected($value, 'yes', false) . '>Show</option>
+                <option value="no"' . selected($value, 'no', false) . '>Hide</option>
+            </select>';
+            echo '<p class="description">Show or hide the "Next Date" label for recurring events.</p>';
+        },
+        'pco-events-styles',
+        'pco_events_styles_section_card'
+    );
+
+    // Add to "Card Styling" section for Tag visibility toggle
+    add_settings_field(
+        'pco_events_show_tags',
+        'Show Event Tags',
+        function() {
+            $value = get_option('pco_events_show_tags', 'yes');
+            echo '<select name="pco_events_show_tags">
+                <option value="yes"' . selected($value, 'yes', false) . '>Show</option>
+                <option value="no"' . selected($value, 'no', false) . '>Hide</option>
+            </select>';
+            echo '<p class="description">Show or hide event tags on event cards.</p>';
+        },
+        'pco-events-styles',
+        'pco_events_styles_section_card'
+    );
+
     // Image Styling fields
     add_settings_field(
         'pco_events_image_padding',

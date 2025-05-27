@@ -53,6 +53,22 @@ function pco_events_render_event_card($event_instance, $included = [], $show_des
         $time_string = date_i18n('g:ia', $starts_at);
     }
 
+    // Recurrence
+    $is_recurring_event = false;
+    $next_date = '';
+    if (
+        !empty($attributes['recurrence']) &&
+        strtolower(trim($attributes['recurrence'])) !== 'none' &&
+        !empty($attributes['recurrence_description'])
+    ) {
+        $is_recurring_event = true;
+        preg_match('/Every\s+\w+/', $attributes['recurrence_description'], $matches);
+        if (!empty($matches[0])) {
+            $recurrence_text = esc_html($matches[0]);
+            $next_date = esc_html($date_string);
+        }
+    }
+
     // Start output
     $output = '<div class="event">';
 
@@ -75,26 +91,26 @@ function pco_events_render_event_card($event_instance, $included = [], $show_des
     $output .= '</div>';
 
     $output .= '<div class="event-date">';
-    if (
-        !empty($attributes['recurrence']) &&
-        strtolower(trim($attributes['recurrence'])) !== 'none' &&
-        !empty($attributes['recurrence_description'])
-    ) {
-        preg_match('/Every\s+\w+/', $attributes['recurrence_description'], $matches);
-        if (!empty($matches[0])) {
-            $recurrence_text = esc_html($matches[0]);
-            $output .= '<span class="recurring-label">' . $recurrence_text . ', ' . esc_html($time_string) . '<br></span>';
-            $output .= '<span class="next-date-label">Next Date: ' . esc_html($date_string) . '</span>';
-        }
+    if ($is_recurring_event) {
+        $output .= '<span class="recurring-label">' . $recurrence_text . ', ' . esc_html($time_string) . '<br></span>';
+        $output .= '<span class="next-date-label">Next Date: ' . esc_html($next_date) . '</span>';
     } else {
         $output .= '<span>' . esc_html($date_string) . ', ' . esc_html($time_string) . '</span>';
     }
     $output .= '</div>';
 
-    if (!empty($event_tags)) {
-        $output .= '<div class="event-tags">';
+    // Show "Next Date" for recurring events if enabled
+    $show_next_date = get_option('pco_events_show_next_date', 'yes');
+    if ($is_recurring_event && $show_next_date === 'yes') {
+        $output .= '<div class="pco-event-next-date" style="color:' . esc_attr(get_option('pco_events_recurring_color', '#0073aa')) . ';">Next Date: ' . esc_html($next_date) . '</div>';
+    }
+
+    // Show tags if enabled
+    $show_tags = get_option('pco_events_show_tags', 'yes');
+    if (!empty($event_tags) && $show_tags === 'yes') {
+        $output .= '<div class="pco-event-tags">';
         foreach ($event_tags as $tag) {
-            $output .= '<span class="event-tag">' . esc_html($tag) . '</span>';
+            $output .= '<span class="pco-event-tag" style="background:' . esc_attr(get_option('pco_events_primary_color', '#0073aa')) . ';">' . esc_html($tag) . '</span> ';
         }
         $output .= '</div>';
     }

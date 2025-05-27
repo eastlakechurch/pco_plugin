@@ -1,4 +1,11 @@
 <?php
+// Shortcode usage:
+// [pco_events] — show all events
+// [pco_events tags="tag1,tag2" start="YYYY-MM-DD" end="YYYY-MM-DD"] — filter by tags and/or date range
+// [pco_event id="INSTANCE_ID" type="instance"] — show a single event instance
+// [pco_event id="EVENT_ID" type="event"] — show next instance of an event
+// [pco_events show_description="false"] — hide description
+// Use the Shortcode Generator in the admin for easy shortcode creation!
 require_once plugin_dir_path(__FILE__) . 'template.php';
 
 function pco_events_all($atts) {
