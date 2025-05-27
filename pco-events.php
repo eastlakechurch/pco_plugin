@@ -39,7 +39,7 @@ if (!defined('PCO_EVENTS_LS_PRODUCT_ID')) {
 }
 
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-    'https://github.com/eastlakechurch/pco-events-updates/blob/main/metadata.json', // URL to your update metadata file
+    'https://raw.githubusercontent.com/eastlakechurch/pco-events-updates/main/metadata.json', // Correct raw URL to your update metadata file
     __FILE__, // Full path to the main plugin file
     'pco_plugin' // Plugin slug (should match your plugin folder name)
 );
