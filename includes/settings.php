@@ -33,6 +33,12 @@ function pco_events_register_settings() {
     add_filter('pre_update_option_pco_events_password', function($value) {
         return pco_events_encrypt($value);
     });
+    add_filter('pre_update_option_pco_events_custom_css', function($css) {
+        // Remove PHP tags and encode HTML special chars
+        $css = wp_strip_all_tags($css);
+        $css = htmlspecialchars($css, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        return $css;
+    });
 
     add_settings_section('pco_events_main', 'API Credentials', null, 'pco-events-settings');
 
@@ -80,6 +86,7 @@ function pco_events_register_settings() {
     add_settings_section('pco_events_styles_section_image', 'Image Styling', null, 'pco-events-styles');
     add_settings_section('pco_events_styles_section_typography', 'Typography', null, 'pco-events-styles');
     add_settings_section('pco_events_styles_section_extra', 'Custom CSS', null, 'pco-events-styles');
+    add_settings_section('pco_events_styles_section_advanced', 'Advanced', null, 'pco-events-styles');
 
 
     // Card Styling fields
@@ -251,10 +258,11 @@ function pco_events_register_settings() {
         'Custom CSS',
         function() {
             $value = get_option('pco_events_custom_css', '');
-            echo '<textarea name="pco_events_custom_css" rows="5" cols="60">' . esc_textarea($value) . '</textarea>';
+            echo '<textarea name="pco_events_custom_css" rows="7" cols="50" class="large-text code">' . esc_textarea($value) . '</textarea>';
+            echo '<p class="description">Only trusted administrators should use this field. Malicious CSS can affect your site appearance.</p>';
         },
         'pco-events-styles',
-        'pco_events_styles_section_extra'
+        'pco_events_styles_section_advanced'
     );
 
     if (is_admin() && isset($_GET['page']) && $_GET['page'] === 'pco-events-settings') {
