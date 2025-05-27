@@ -339,8 +339,12 @@ function pco_events_shortcode_generator_page() {
         }
 
         // Add event listeners for the new checkboxes
-        document.getElementById('pco_hide_image').addEventListener('change', buildShortcode);
-        document.getElementById('pco_hide_tags').addEventListener('change', buildShortcode);
+        if (document.getElementById('pco_hide_image')) {
+            document.getElementById('pco_hide_image').addEventListener('change', buildShortcode);
+        }
+        if (document.getElementById('pco_hide_tags')) {
+            document.getElementById('pco_hide_tags').addEventListener('change', buildShortcode);
+        }
 
         document.getElementById('pco_tag_selector').addEventListener('change', function() {
             document.getElementById('pco_event_selector').selectedIndex = 0;
@@ -368,8 +372,9 @@ function pco_events_shortcode_generator_page() {
             buildShortcode();
         });
 
-        // Initial filter
+        // Initial filter and shortcode build
         filterEventsDropdown();
+        buildShortcode();
         </script>
     </div>
     <?php
