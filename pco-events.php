@@ -9,6 +9,14 @@ License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
+require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
+
+$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+    'https://raw.githubusercontent.com/eastlakechurch/pco-events-updates/main/metadata.json',
+    __FILE__,
+    'pco_plugin'
+);
+
 require_once plugin_dir_path(__FILE__) . 'includes/encryption.php';
 require_once plugin_dir_path(__FILE__) . 'includes/api.php';
 require_once plugin_dir_path(__FILE__) . 'includes/shortcodes.php';
@@ -17,7 +25,6 @@ require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/license.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
 require_once plugin_dir_path(__FILE__) . 'includes/preview.php';
-require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
 
 add_action('admin_notices', 'pco_events_admin_notices');
 function pco_events_admin_notices() {
@@ -37,9 +44,3 @@ if (!defined('PCO_EVENTS_LS_API_KEY')) {
 if (!defined('PCO_EVENTS_LS_PRODUCT_ID')) {
     define('PCO_EVENTS_LS_PRODUCT_ID', '532075');
 }
-
-$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-    'https://raw.githubusercontent.com/eastlakechurch/pco-events-updates/main/metadata.json', // Correct raw URL to your update metadata file
-    __FILE__, // Full path to the main plugin file
-    'pco_plugin' // Plugin slug (should match your plugin folder name)
-);
