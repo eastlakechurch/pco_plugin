@@ -1,0 +1,26 @@
+name: Zip WordPress Plugin
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create ZIP file
+      run: |
+        mkdir output
+        cd pco_plugin
+        zip -r ../output/pco_events_plugin.zip . -x "*.git*" "*.github*" "tests/*"
+
+    - name: Upload ZIP as release asset
+      uses: softprops/action-gh-release@v1
+      with:
+        files: output/your-plugin.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
