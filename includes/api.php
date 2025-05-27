@@ -1,4 +1,7 @@
 <?php
+// Add this as the first line in all PHP files except the main plugin file
+if (!defined('ABSPATH')) exit;
+
 require_once plugin_dir_path(__FILE__) . 'template.php';
 
 function fetch_pco_events_from_api($filter_tags = [], $limit = 0, $show_description = true) {

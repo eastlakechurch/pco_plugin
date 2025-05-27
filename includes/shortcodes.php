@@ -1,4 +1,7 @@
 <?php
+// Add this as the first line in all PHP files except the main plugin file
+if (!defined('ABSPATH')) exit;
+
 // Shortcode usage:
 // [pco_events] — show all events
 // [pco_events tags="tag1,tag2" start="YYYY-MM-DD" end="YYYY-MM-DD"] — filter by tags and/or date range

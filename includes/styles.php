@@ -1,4 +1,6 @@
 <?php
+// Add this as the first line in all PHP files except the main plugin file
+if (!defined('ABSPATH')) exit;
 
 function pco_events_styles() {
     wp_register_style('events-style', false);

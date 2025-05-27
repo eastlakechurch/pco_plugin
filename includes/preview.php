@@ -1,4 +1,6 @@
 <?php
+// Add this as the first line in all PHP files except the main plugin file
+if (!defined('ABSPATH')) exit;
 
 function pco_events_styles_page() {
     if (isset($_POST['pco_events_reset_styles'])) {

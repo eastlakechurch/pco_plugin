@@ -1,4 +1,7 @@
 <?php
+// Add this as the first line in all PHP files except the main plugin file
+if (!defined('ABSPATH')) exit;
+
 function pco_events_render_event_card($event_instance, $included = [], $show_description = true) {
     // Find the related Event object
     $event_id = $event_instance['relationships']['event']['data']['id'] ?? null;

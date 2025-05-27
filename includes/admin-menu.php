@@ -1,4 +1,6 @@
 <?php
+// Add this as the first line in all PHP files except the main plugin file
+if (!defined('ABSPATH')) exit;
 
 add_action('admin_menu', 'pco_events_admin_menu');
 
