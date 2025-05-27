@@ -11,7 +11,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
 
-$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+$myUpdateChecker = YahnisElsts\PluginUpdateChecker\v5p6\Factory::buildUpdateChecker(
     'https://raw.githubusercontent.com/eastlakechurch/pco-events-updates/main/metadata.json',
     __FILE__,
     'pco_plugin'
