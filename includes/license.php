@@ -20,8 +20,9 @@ function pco_events_handle_license_actions() {
 }
 
 function pco_events_validate_license_key($license_key) {
-    $api_key = defined('PCO_EVENTS_LS_API_KEY') ? PCO_EVENTS_LS_API_KEY : '';
-    $product_id = defined('PCO_EVENTS_LS_PRODUCT_ID') ? PCO_EVENTS_LS_PRODUCT_ID : 0;
+    // Use the constants directly, no fallback to get_option()
+    $api_key = PCO_EVENTS_LS_API_KEY;
+    $product_id = PCO_EVENTS_LS_PRODUCT_ID;
 
     if (empty($api_key) || empty($product_id) || empty($license_key)) {
         return false;

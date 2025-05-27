@@ -253,128 +253,145 @@ function pco_events_shortcode_generator_page() {
             </p>
         </div>
         <script>
-        // Helper to get selected tags as array
-        function getSelectedTags() {
-            var sel = document.getElementById('pco_tag_selector');
-            var tags = [];
-            for (var i = 0; i < sel.options.length; i++) {
-                if (sel.options[i].selected) {
-                    tags.push(sel.options[i].value);
+        document.addEventListener('DOMContentLoaded', function() {
+            function getSelectedTags() {
+                var sel = document.getElementById('pco_tag_selector');
+                var tags = [];
+                if (!sel) return tags;
+                for (var i = 0; i < sel.options.length; i++) {
+                    if (sel.options[i].selected) {
+                        tags.push(sel.options[i].value);
+                    }
+                }
+                return tags;
+            }
+
+            function filterEventsDropdown() {
+                var tags = getSelectedTags();
+                var start = document.getElementById('pco_start_date') ? document.getElementById('pco_start_date').value : '';
+                var end = document.getElementById('pco_end_date') ? document.getElementById('pco_end_date').value : '';
+                var eventSel = document.getElementById('pco_event_selector');
+                if (!eventSel) return;
+                for (var i = 1; i < eventSel.options.length; i++) { // skip first option
+                    var opt = eventSel.options[i];
+                    var eventTags = opt.getAttribute('data-tags') ? opt.getAttribute('data-tags').split(',') : [];
+                    var eventStart = opt.getAttribute('data-start');
+                    var show = true;
+
+                    // Tag filter (any selected tag must be present)
+                    if (tags.length > 0) {
+                        show = tags.some(function(tag) {
+                            return eventTags.includes(tag);
+                        });
+                    }
+
+                    // Date filter
+                    if (show && start) {
+                        show = (eventStart >= start);
+                    }
+                    if (show && end) {
+                        show = (eventStart <= end + 'T23:59:59');
+                    }
+
+                    opt.style.display = show ? '' : 'none';
+                }
+                // Reset selection if current is hidden
+                if (eventSel.selectedIndex > 0 && eventSel.options[eventSel.selectedIndex].style.display === 'none') {
+                    eventSel.selectedIndex = 0;
                 }
             }
-            return tags;
-        }
 
-        // Filter event dropdown by selected tags and date range
-        function filterEventsDropdown() {
-            var tags = getSelectedTags();
-            var start = document.getElementById('pco_start_date').value;
-            var end = document.getElementById('pco_end_date').value;
-            var eventSel = document.getElementById('pco_event_selector');
-            for (var i = 1; i < eventSel.options.length; i++) { // skip first option
-                var opt = eventSel.options[i];
-                var eventTags = opt.getAttribute('data-tags').split(',');
-                var eventStart = opt.getAttribute('data-start');
-                var show = true;
+            function buildShortcode() {
+                var tags = getSelectedTags();
+                var start = document.getElementById('pco_start_date') ? document.getElementById('pco_start_date').value : '';
+                var end = document.getElementById('pco_end_date') ? document.getElementById('pco_end_date').value : '';
+                var eventSel = document.getElementById('pco_event_selector');
+                var eventId = eventSel && eventSel.value ? eventSel.value : '';
+                var instanceId = (eventSel && eventSel.options[eventSel.selectedIndex]) ? eventSel.options[eventSel.selectedIndex].getAttribute('data-instance') : '';
+                var output = document.getElementById('pco_shortcode_output');
+                var input = document.getElementById('pco_shortcode_text');
+                var shortcode = '';
 
-                // Tag filter (all selected tags must be present)
-                if (tags.length > 0) {
-                    show = tags.some(function(tag) {
-                        return eventTags.includes(tag);
-                    });
+                var hideImage = document.getElementById('pco_hide_image') ? document.getElementById('pco_hide_image').checked : false;
+                var hideTags = document.getElementById('pco_hide_tags') ? document.getElementById('pco_hide_tags').checked : false;
+
+                if (eventId && instanceId && eventSel.options[eventSel.selectedIndex].style.display !== 'none') {
+                    shortcode = '[pco_event id="' + instanceId + '" type="instance"';
+                    if (hideImage) shortcode += ' show_image="false"';
+                    if (hideTags) shortcode += ' show_tags="false"';
+                    shortcode += ']';
+                } else {
+                    shortcode = '[pco_events';
+                    if (tags.length > 0) shortcode += ' tags="' + tags.join(',') + '"';
+                    if (start) shortcode += ' start="' + start + '"';
+                    if (end) shortcode += ' end="' + end + '"';
+                    if (hideImage) shortcode += ' show_image="false"';
+                    if (hideTags) shortcode += ' show_tags="false"';
+                    shortcode += ']';
                 }
 
-                // Date filter
-                if (show && start) {
-                    show = (eventStart >= start);
+                if (input && output) {
+                    if (shortcode) {
+                        input.value = shortcode;
+                        output.style.display = 'block';
+                    } else {
+                        output.style.display = 'none';
+                    }
                 }
-                if (show && end) {
-                    show = (eventStart <= end + 'T23:59:59');
-                }
-
-                opt.style.display = show ? '' : 'none';
-            }
-            // Reset selection if current is hidden
-            if (eventSel.selectedIndex > 0 && eventSel.options[eventSel.selectedIndex].style.display === 'none') {
-                eventSel.selectedIndex = 0;
-            }
-        }
-
-        function buildShortcode() {
-            var tags = getSelectedTags();
-            var start = document.getElementById('pco_start_date').value;
-            var end = document.getElementById('pco_end_date').value;
-            var eventSel = document.getElementById('pco_event_selector');
-            var eventId = eventSel.value;
-            var instanceId = eventSel.options[eventSel.selectedIndex] ? eventSel.options[eventSel.selectedIndex].getAttribute('data-instance') : '';
-            var output = document.getElementById('pco_shortcode_output');
-            var input = document.getElementById('pco_shortcode_text');
-            var shortcode = '';
-
-            // NEW: Get checkbox values
-            var hideImage = document.getElementById('pco_hide_image').checked;
-            var hideTags = document.getElementById('pco_hide_tags').checked;
-
-            if (eventId && instanceId && eventSel.options[eventSel.selectedIndex].style.display !== 'none') {
-                shortcode = '[pco_event id="' + instanceId + '" type="instance"';
-                if (hideImage) shortcode += ' show_image="false"';
-                if (hideTags) shortcode += ' show_tags="false"';
-                shortcode += ']';
-            } else {
-                shortcode = '[pco_events';
-                if (tags.length > 0) shortcode += ' tags="' + tags.join(',') + '"';
-                if (start) shortcode += ' start="' + start + '"';
-                if (end) shortcode += ' end="' + end + '"';
-                if (hideImage) shortcode += ' show_image="false"';
-                if (hideTags) shortcode += ' show_tags="false"';
-                shortcode += ']';
             }
 
-            if (shortcode) {
-                input.value = shortcode;
-                output.style.display = 'block';
-            } else {
-                output.style.display = 'none';
+            // Add event listeners only if elements exist
+            var tagSelector = document.getElementById('pco_tag_selector');
+            var startDate = document.getElementById('pco_start_date');
+            var endDate = document.getElementById('pco_end_date');
+            var eventSelector = document.getElementById('pco_event_selector');
+            var hideImage = document.getElementById('pco_hide_image');
+            var hideTags = document.getElementById('pco_hide_tags');
+
+            if (tagSelector) {
+                tagSelector.addEventListener('change', function() {
+                    if (eventSelector) eventSelector.selectedIndex = 0;
+                    filterEventsDropdown();
+                    buildShortcode();
+                });
             }
-        }
+            if (startDate) {
+                startDate.addEventListener('change', function() {
+                    if (eventSelector) eventSelector.selectedIndex = 0;
+                    filterEventsDropdown();
+                    buildShortcode();
+                });
+            }
+            if (endDate) {
+                endDate.addEventListener('change', function() {
+                    if (eventSelector) eventSelector.selectedIndex = 0;
+                    filterEventsDropdown();
+                    buildShortcode();
+                });
+            }
+            if (eventSelector) {
+                eventSelector.addEventListener('change', function() {
+                    // Clear tag and date if event is chosen
+                    if (this.value) {
+                        if (tagSelector) tagSelector.selectedIndex = -1;
+                        if (startDate) startDate.value = '';
+                        if (endDate) endDate.value = '';
+                        filterEventsDropdown();
+                    }
+                    buildShortcode();
+                });
+            }
+            if (hideImage) {
+                hideImage.addEventListener('change', buildShortcode);
+            }
+            if (hideTags) {
+                hideTags.addEventListener('change', buildShortcode);
+            }
 
-        // Add event listeners for the new checkboxes
-        if (document.getElementById('pco_hide_image')) {
-            document.getElementById('pco_hide_image').addEventListener('change', buildShortcode);
-        }
-        if (document.getElementById('pco_hide_tags')) {
-            document.getElementById('pco_hide_tags').addEventListener('change', buildShortcode);
-        }
-
-        document.getElementById('pco_tag_selector').addEventListener('change', function() {
-            document.getElementById('pco_event_selector').selectedIndex = 0;
+            // Initial filter and shortcode build
             filterEventsDropdown();
             buildShortcode();
         });
-        document.getElementById('pco_start_date').addEventListener('change', function() {
-            document.getElementById('pco_event_selector').selectedIndex = 0;
-            filterEventsDropdown();
-            buildShortcode();
-        });
-        document.getElementById('pco_end_date').addEventListener('change', function() {
-            document.getElementById('pco_event_selector').selectedIndex = 0;
-            filterEventsDropdown();
-            buildShortcode();
-        });
-        document.getElementById('pco_event_selector').addEventListener('change', function() {
-            // Clear tag and date if event is chosen
-            if (this.value) {
-                document.getElementById('pco_tag_selector').selectedIndex = -1;
-                document.getElementById('pco_start_date').value = '';
-                document.getElementById('pco_end_date').value = '';
-                filterEventsDropdown();
-            }
-            buildShortcode();
-        });
-
-        // Initial filter and shortcode build
-        filterEventsDropdown();
-        buildShortcode();
         </script>
     </div>
     <?php
