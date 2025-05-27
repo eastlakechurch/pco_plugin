@@ -75,7 +75,9 @@ function pco_events_render_event_card($event_instance, $included = [], $show_des
     // Start output
     $output = '<div class="event">';
 
-    if ($image_url) {
+    // Show image if enabled
+    $show_image = get_option('pco_events_show_image', 'yes');
+    if ($show_image && $image_url) {
         if (!empty($event_url)) {
             $output .= '<a href="' . esc_url($event_url) . '" target="_blank">';
             $output .= '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($event_attrs['name']) . '" />';
@@ -110,7 +112,7 @@ function pco_events_render_event_card($event_instance, $included = [], $show_des
 
     // Show tags if enabled
     $show_tags = get_option('pco_events_show_tags', 'yes');
-    if (!empty($event_tags) && $show_tags === 'yes') {
+    if ($show_tags && !empty($event_tags)) {
         $output .= '<div class="pco-event-tags">';
         foreach ($event_tags as $tag) {
             $output .= '<span class="pco-event-tag" style="background:' . esc_attr(get_option('pco_events_primary_color', '#0073aa')) . ';">' . esc_html($tag) . '</span> ';

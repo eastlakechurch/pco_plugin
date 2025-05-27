@@ -225,6 +225,11 @@ function pco_events_shortcode_generator_page() {
         echo '<label for="pco_end_date">End date:</label> ';
         echo '<input type="date" id="pco_end_date" style="margin-right:20px;">';
 
+        // Add checkboxes for Hide Image and Hide Tags
+        echo '<br><br>';
+        echo '<label><input type="checkbox" id="pco_hide_image"> Hide event image</label> ';
+        echo '<label style="margin-left:20px;"><input type="checkbox" id="pco_hide_tags"> Hide event tags</label>';
+
         // Events dropdown (will be filtered by JS)
         echo '<br><br><label for="pco_event_selector">Or select a single event:</label> ';
         echo '<select id="pco_event_selector">';
@@ -306,13 +311,22 @@ function pco_events_shortcode_generator_page() {
             var input = document.getElementById('pco_shortcode_text');
             var shortcode = '';
 
+            // NEW: Get checkbox values
+            var hideImage = document.getElementById('pco_hide_image').checked;
+            var hideTags = document.getElementById('pco_hide_tags').checked;
+
             if (eventId && instanceId && eventSel.options[eventSel.selectedIndex].style.display !== 'none') {
-                shortcode = '[pco_event id="' + instanceId + '" type="instance"]';
+                shortcode = '[pco_event id="' + instanceId + '" type="instance"';
+                if (hideImage) shortcode += ' show_image="false"';
+                if (hideTags) shortcode += ' show_tags="false"';
+                shortcode += ']';
             } else {
                 shortcode = '[pco_events';
                 if (tags.length > 0) shortcode += ' tags="' + tags.join(',') + '"';
                 if (start) shortcode += ' start="' + start + '"';
                 if (end) shortcode += ' end="' + end + '"';
+                if (hideImage) shortcode += ' show_image="false"';
+                if (hideTags) shortcode += ' show_tags="false"';
                 shortcode += ']';
             }
 
@@ -323,6 +337,10 @@ function pco_events_shortcode_generator_page() {
                 output.style.display = 'none';
             }
         }
+
+        // Add event listeners for the new checkboxes
+        document.getElementById('pco_hide_image').addEventListener('change', buildShortcode);
+        document.getElementById('pco_hide_tags').addEventListener('change', buildShortcode);
 
         document.getElementById('pco_tag_selector').addEventListener('change', function() {
             document.getElementById('pco_event_selector').selectedIndex = 0;

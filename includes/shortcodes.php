@@ -20,10 +20,16 @@ function pco_events_all($atts) {
     }
 
     $atts = shortcode_atts([
-        'show_description' => 'true'
-    ], $atts);
+        'show_description' => 'true',
+        'show_image' => 'true',
+        'show_tags' => 'true',
+    ], $atts, 'pco_events');
+
     $show_desc = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-    return fetch_pco_events_from_api([], 0, $show_desc);
+    $show_image = ($atts['show_image'] !== 'false');
+    $show_tags = ($atts['show_tags'] !== 'false');
+
+    return fetch_pco_events_from_api([], 0, $show_desc, $show_image, $show_tags);
 }
 add_shortcode('pco_events', 'pco_events_all');
 
@@ -38,13 +44,17 @@ function pco_events_featured($atts) {
     $atts = shortcode_atts([
         'tags' => 'featured',
         'count' => 3,
-        'show_description' => 'true'
+        'show_description' => 'true',
+        'show_image' => 'true',
+        'show_tags' => 'true',
     ], $atts);
 
     $tags = (trim($atts['tags']) === '') ? [] : array_map('trim', explode(',', $atts['tags']));
     $show_desc = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
+    $show_image = ($atts['show_image'] !== 'false');
+    $show_tags = ($atts['show_tags'] !== 'false');
 
-    return fetch_pco_events_from_api($tags, intval($atts['count']), $show_desc);
+    return fetch_pco_events_from_api($tags, intval($atts['count']), $show_desc, $show_image, $show_tags);
 }
 add_shortcode('pco_featured_events', 'pco_events_featured');
 
@@ -57,12 +67,16 @@ function pco_events_single($atts) {
     $atts = shortcode_atts([
         'id' => '',
         'type' => 'event', // 'event' or 'instance'
-        'show_description' => 'true'
+        'show_description' => 'true',
+        'show_image' => 'true',
+        'show_tags' => 'true',
     ], $atts);
 
     $id = trim($atts['id']);
     $type = strtolower(trim($atts['type']));
     $show_desc = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
+    $show_image = ($atts['show_image'] !== 'false');
+    $show_tags = ($atts['show_tags'] !== 'false');
 
     if (empty($id)) {
         return '<p>No event ID provided.</p>';
@@ -75,6 +89,6 @@ function pco_events_single($atts) {
     }
 
     // Use the same card rendering function
-    return '<div class="events">' . pco_events_render_event_card($event_data['event_instance'], $event_data['included'], $show_desc) . '</div>';
+    return '<div class="events">' . pco_events_render_event_card($event_data['event_instance'], $event_data['included'], $show_desc, $show_image, $show_tags) . '</div>';
 }
 add_shortcode('pco_event', 'pco_events_single');
