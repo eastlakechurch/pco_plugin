@@ -1,0 +1,29 @@
+.pco-groups-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-bottom: 1.5em;
+}
+.pco-groups-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+}
+.pco-group-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 1.5em;
+    flex: 1 1 300px;
+    min-width: 300px;
+    max-width: 400px;
+}
+.pco-group-card h3 {
+    margin-top: 0;
+}
+.pco-group-card .meta span {
+    display: inline-block;
+    margin-right: 1em;
+    color: #666;
+    font-size: 0.95em;
+}

@@ -25,6 +25,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/license.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
 require_once plugin_dir_path(__FILE__) . 'includes/preview.php';
+require_once plugin_dir_path(__FILE__) . 'includes/groups-api.php';
+require_once plugin_dir_path(__FILE__) . 'includes/groups-shortcodes.php';
 
 add_action('admin_notices', 'pco_events_admin_notices');
 function pco_events_admin_notices() {
@@ -44,3 +46,8 @@ if (!defined('PCO_EVENTS_LS_API_KEY')) {
 if (!defined('PCO_EVENTS_LS_PRODUCT_ID')) {
     define('PCO_EVENTS_LS_PRODUCT_ID', '532075');
 }
+
+add_action('wp_enqueue_scripts', function() {
+    wp_register_style('pco-groups-style', plugins_url('assets/groups.css', __FILE__));
+    wp_register_script('pco-groups-script', plugins_url('assets/groups.js', __FILE__), ['jquery'], null, true);
+});
