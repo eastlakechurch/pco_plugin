@@ -40,10 +40,10 @@ function pco_groups_shortcode($atts) {
                 <div class="desc"><?php echo esc_html($attr['description']); ?></div>
                 
                 <?php if ($location_name): ?>
-                    <div class="meta-location"><strong>Location:</strong> <?php echo esc_html($location_name); ?></div>
+                    <div class="meta-location"><?php echo esc_html($location_name); ?></div>
                 <?php endif; ?>
                 <?php if ($recurrence): ?>
-                    <div class="meta-recurrence"><strong>Meets:</strong> <?php echo esc_html($recurrence); ?></div>
+                    <div class="meta-recurrence"><?php echo esc_html($recurrence); ?></div>
                 <?php endif; ?>
 
                 <div class="meta">
