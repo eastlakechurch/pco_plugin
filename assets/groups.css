@@ -27,3 +27,14 @@
     color: #666;
     font-size: 0.95em;
 }
+.pco-group-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1em;
+}
+.meta-location, .meta-recurrence {
+    margin: 0.5em 0;
+    color: #444;
+    font-size: 1em;
+}
