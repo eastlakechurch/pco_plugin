@@ -114,7 +114,7 @@ function pco_events_styles_page() {
                 </style>
                 <div class="events">
                     <div class="event">
-                        <img src="<?php echo plugin_dir_url(__FILE__) . '../images/sample.jpg'; ?>" alt="Sample Event Image" />
+                        <img src="<?php echo plugins_url('images/sample.jpg', dirname(__FILE__, 2) . '/pco-integrations.php'); ?>" alt="Sample Event Image" />
                         <div class="event-title-wrap">
                             <h3>Sample Event Title</h3>
                         </div>
