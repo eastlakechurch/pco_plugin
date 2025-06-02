@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "pco_groups",
+			"path": "../../pco_groups"
+		},
+		{
+			"name": "pco-events-updates",
+			"path": "../../pco-events-updates"
+		}
+	],
+	"settings": {}
+}

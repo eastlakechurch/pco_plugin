@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: PCO Events for WordPress
-Description: Display and filter upcoming Planning Center Calendar events in your WordPress site using shortcodes. Includes caching, tags, and recurring event support.
+Plugin Name: PCO Integrations for WordPress
+Description: Integrate Planning Center with WordPress for events, groups, and publishing. Display and filter upcoming Planning Center data using shortcodes. Includes caching, tags, and recurring event support.
 Version: 1.0.6
 Author: Josh Edwards
 Plugin URI: https://github.com/eastlakechurch/pco_plugin
@@ -18,15 +18,15 @@ $myUpdateChecker = YahnisElsts\PluginUpdateChecker\v5p6\PucFactory::buildUpdateC
 );
 
 require_once plugin_dir_path(__FILE__) . 'includes/encryption.php';
-require_once plugin_dir_path(__FILE__) . 'includes/api.php';
-require_once plugin_dir_path(__FILE__) . 'includes/shortcodes.php';
-require_once plugin_dir_path(__FILE__) . 'includes/styles.php';
-require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
-require_once plugin_dir_path(__FILE__) . 'includes/license.php';
-require_once plugin_dir_path(__FILE__) . 'includes/admin-menu.php';
-require_once plugin_dir_path(__FILE__) . 'includes/preview.php';
-require_once plugin_dir_path(__FILE__) . 'includes/groups-api.php';
-require_once plugin_dir_path(__FILE__) . 'includes/groups-shortcodes.php';
+require_once plugin_dir_path(__FILE__) . 'includes/events/events-api.php';
+require_once plugin_dir_path(__FILE__) . 'includes/events/events-shortcodes.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/styles.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/settings.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/license.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-menu.php';
+require_once plugin_dir_path(__FILE__) . 'includes/admin/preview.php';
+require_once plugin_dir_path(__FILE__) . 'includes/groups/groups-api.php';
+require_once plugin_dir_path(__FILE__) . 'includes/groups/groups-shortcodes.php';
 
 add_action('admin_notices', 'pco_events_admin_notices');
 function pco_events_admin_notices() {
