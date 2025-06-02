@@ -1,4 +1,4 @@
-=== PCO Events for WordPress ===
+=== PCO Integrations for WordPress ===
 Contributors: Joshua Edwards
 Tags: planning center, events, calendar, shortcode, church
 Requires at least: 5.0
@@ -12,7 +12,7 @@ A premium plugin for displaying Planning Center Calendar events beautifully in W
 
 == Description ==
 
-**PCO Events for WordPress** is a powerful yet simple plugin built for churches using Planning Center Online (PCO). It pulls upcoming events from your Planning Center Calendar and displays them on your website using clean, modern layouts and flexible shortcode options.
+**PCO Integrations for WordPress** is a powerful yet simple plugin built for churches using Planning Center Online (PCO). It pulls upcoming events from your Planning Center Calendar and displays them on your website using clean, modern layouts and flexible shortcode options.
 
 Built with security and flexibility in mind, it includes encrypted credential storage, nonce protection for all sensitive actions, and full style customization to match your brand.
 
@@ -34,19 +34,19 @@ Built with security and flexibility in mind, it includes encrypted credential st
 2. In your WordPress dashboard, go to `Plugins > Add New > Upload Plugin`.
 3. Upload the ZIP file and click "Install Now."
 4. Activate the plugin.
-5. Navigate to `PCO Events > Settings` to enter your Planning Center API credentials (username and personal access token).
+5. Navigate to `PCO Integrations > Settings` to enter your Planning Center API credentials (username and personal access token).
 
 == Shortcodes ==
 
 Place these shortcodes in any page, post, or widget:
 
-**All Events**
+**All PCO Integrations - Events**
 [pco_events]
 
 **Hide Descriptions**
 [pco_events show_description="false"]
 
-**Only Featured Events**
+**Only Featured PCO Integrations - Events**
 [pco_featured_events tags="featured"]
 
 **Multiple Tags & Limit Count**

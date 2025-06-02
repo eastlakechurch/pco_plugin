@@ -147,7 +147,7 @@ function pco_events_register_settings() {
     // Add to "Card Styling" section for Next Date toggle
     add_settings_field(
         'pco_events_show_next_date',
-        'Show "Next Date" for Recurring Events',
+        'Show "Next Date" for Recurring PCO Integrations - Events',
         function() {
             $value = get_option('pco_events_show_next_date', 'yes');
             echo '<select name="pco_events_show_next_date">

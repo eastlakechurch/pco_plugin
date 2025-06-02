@@ -5,7 +5,7 @@ function pco_groups_fetch_groups($params = []) {
     $username = pco_events_decrypt(get_option('pco_events_username'));
     $password = pco_events_decrypt(get_option('pco_events_password'));
     if (!$username || !$password) {
-        echo '<div style="color:red;">PCO Groups: API credentials are missing. Please check your plugin settings.</div>';
+        echo '<div style="color:red;">PCO PCO Integrations - Groups: API credentials are missing. Please check your plugin settings.</div>';
         return [];
     }
 
@@ -22,12 +22,12 @@ function pco_groups_fetch_groups($params = []) {
         'timeout' => 15,
     ]);
     if (is_wp_error($response)) {
-        echo '<div style="color:red;">PCO Groups API error: ' . esc_html($response->get_error_message()) . '</div>';
+        echo '<div style="color:red;">PCO PCO Integrations - Groups API error: ' . esc_html($response->get_error_message()) . '</div>';
         return [];
     }
     $body = json_decode(wp_remote_retrieve_body($response), true);
     if (empty($body['data'])) {
-        echo '<div style="color:red;">PCO Groups API returned no data. Raw response: <pre>' . esc_html(wp_remote_retrieve_body($response)) . '</pre></div>';
+        echo '<div style="color:red;">PCO PCO Integrations - Groups API returned no data. Raw response: <pre>' . esc_html(wp_remote_retrieve_body($response)) . '</pre></div>';
     }
     return $body['data'] ?? [];
 }

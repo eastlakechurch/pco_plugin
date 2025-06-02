@@ -6,8 +6,8 @@ add_action('admin_menu', 'pco_events_admin_menu');
 
 function pco_events_admin_menu() {
     add_menu_page(
-        'PCO Events',
-        'PCO Events',
+        'PCO Integrations',
+        'PCO Integrations',
         'manage_options',
         'pco-events',
         'pco_events_about_page',
@@ -55,7 +55,7 @@ function pco_events_admin_menu() {
 function pco_events_about_page() {
     ?>
     <div class="wrap">
-        <h1>About PCO Events</h1>
+        <h1>About PCO Integrations</h1>
         <p>This plugin integrates your WordPress site with Planning Center to display upcoming events.</p>
         <h2>Shortcodes</h2>
         <p>Use these shortcodes anywhere in your pages or posts, or use the <strong>Shortcode Generator</strong> tab to easily build and copy a shortcode for:</p>
@@ -91,7 +91,7 @@ function pco_events_about_page() {
 function pco_events_settings_page() {
     ?>
     <div class="wrap">
-        <h1>PCO Events Settings</h1>
+        <h1>PCO Integrations Settings</h1>
         <?php
         $username = pco_events_decrypt(get_option('pco_events_username'));
         $password = pco_events_decrypt(get_option('pco_events_password'));
@@ -138,7 +138,7 @@ function pco_events_settings_page() {
 function pco_events_shortcode_generator_page() {
     ?>
     <div class="wrap">
-        <h1>PCO Events Shortcode Generator</h1>
+        <h1>PCO Integrations Shortcode Generator</h1>
         <p>Select options below to generate a shortcode for displaying events.</p>
         <?php
         // Fetch upcoming events (reuse your API logic)
@@ -230,7 +230,7 @@ function pco_events_shortcode_generator_page() {
         echo '<label><input type="checkbox" id="pco_hide_image"> Hide event image</label> ';
         echo '<label style="margin-left:20px;"><input type="checkbox" id="pco_hide_tags"> Hide event tags</label>';
 
-        // Events dropdown (will be filtered by JS)
+        // PCO Integrations - Events dropdown (will be filtered by JS)
         echo '<br><br><label for="pco_event_selector">Or select a single event:</label> ';
         echo '<select id="pco_event_selector">';
         echo '<option value="">-- Select an event --</option>';

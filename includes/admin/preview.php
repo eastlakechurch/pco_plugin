@@ -14,7 +14,7 @@ function pco_events_styles_page() {
     }
     ?>
     <div class="wrap">
-        <h1>PCO Events – Styles</h1>
+        <h1>PCO Integrations – Styles</h1>
         <div style="display: flex; flex-wrap: nowrap; gap: 40px; align-items: flex-start;">
             <div style="flex: 1 1 50%; max-width: 600px;">
                 <form method="post" action="options.php">
