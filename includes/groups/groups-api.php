@@ -51,3 +51,29 @@ function pco_groups_fetch_location_name($location_id) {
     $body = json_decode(wp_remote_retrieve_body($response), true);
     return $body['data']['attributes']['name'] ?? '';
 }
+
+function pco_groups_fetch_group_types() {
+    $username = pco_events_decrypt(get_option('pco_events_username'));
+    $password = pco_events_decrypt(get_option('pco_events_password'));
+    if (!$username || !$password) return [];
+
+    $url = 'https://api.planningcenteronline.com/groups/v2/group_types';
+    $response = wp_remote_get($url, [
+        'headers' => [
+            'Authorization' => 'Basic ' . base64_encode("$username:$password"),
+            'Accept' => 'application/json',
+        ],
+        'timeout' => 10,
+    ]);
+    if (is_wp_error($response)) return [];
+    $body = json_decode(wp_remote_retrieve_body($response), true);
+    $types = [];
+    if (!empty($body['data'])) {
+        foreach ($body['data'] as $type) {
+            $id = $type['id'];
+            $name = $type['attributes']['name'] ?? $id;
+            $types[$id] = $name;
+        }
+    }
+    return $types;
+}
