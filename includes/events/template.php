@@ -104,12 +104,6 @@ function pco_events_render_event_card($event_instance, $included = [], $show_des
     }
     $output .= '</div>';
 
-    // Show "Next Date" for recurring events if enabled
-    $show_next_date = get_option('pco_events_show_next_date', 'yes');
-    if ($is_recurring_event && $show_next_date === 'yes') {
-        $output .= '<div class="pco-event-next-date" style="color:' . esc_attr(get_option('pco_events_recurring_color', '#0073aa')) . ';">Next Date: ' . esc_html($next_date) . '</div>';
-    }
-
     // Show tags if enabled
     $show_tags = get_option('pco_events_show_tags', 'yes');
     if ($show_tags && !empty($event_tags)) {
