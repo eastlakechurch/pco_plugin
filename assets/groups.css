@@ -1,14 +1,50 @@
 .pco-groups-filters {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1em;
-    margin-bottom: 2em;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 0.5em;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
+    margin: 3em auto 2em auto;
+    padding: 0 1em;
+    box-sizing: border-box;
+}
+
+.pco-groups-filters select,
+.pco-groups-filters input[type="text"] {
+    appearance: none;
+    background-color: #f8f9fb;
+    color: #2c3e50;
+    padding: 1em 1.25em;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.07);
+    width: auto;
+    max-width: none;
+    flex: 1 1 0;
+    min-width: 0;
+    transition: all 0.2s ease;
+}
+
+.pco-groups-filters select {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23444' d='M70 85.6 32.8 48.4 48.4 32.8 70 54.4 91.6 32.8 107.2 48.4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1em center;
+    background-size: 0.9em;
+    padding-right: 2.5em;
+}
+
+.pco-groups-filters select:focus,
+.pco-groups-filters input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 75, 110, 0.25);
 }
 
 .pco-groups-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 2.5em;
     padding: 0 1em;
 }
@@ -22,8 +58,11 @@
     flex-direction: column;
     transition: transform 0.18s cubic-bezier(.4,0,.2,1), box-shadow 0.18s cubic-bezier(.4,0,.2,1);
     text-align: left;
-    min-height: 420px;
     position: relative;
+    cursor: pointer;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .pco-group-card:hover {
@@ -36,15 +75,15 @@
     width: 100%;
     height: 180px;
     object-fit: cover;
-    border-radius: 18px 18px 0 0;
-    margin-bottom: 0;
+    border-radius: 18px 18px 0 0 !important;
+    background-color: #eee;
     display: block;
 }
 
 .pco-group-card h3 {
-    font-size: 1.45em;
+    font-size: 1.25em;
     font-weight: 700;
-    margin: 1.1em 0 0.5em 0;
+    margin: 0.9em 0 0.4em 0;
     padding: 0 1.1em;
     color: #1a1a1a;
     line-height: 1.2;
@@ -52,27 +91,42 @@
 
 .pco-group-card .desc {
     color: #6b6b6b;
-    font-size: 1em;
+    font-size: 0.95em;
+    line-height: 1.45;
     margin: 0 0 1em 0;
     padding: 0 1.1em;
-    min-height: 48px;
 }
 
-.meta-location, .meta-recurrence {
+
+.meta-location {
+    display: flex;
+    align-items: center;
+    color: #444;
+    font-size: 0.95em;
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 0.9em 0 0.4em 0;
+    padding: 0 1.1em;
+}
+
+.meta-location::before {
+    content: '';
     display: inline-block;
-    background: #f1f5fa;
-    color: #1a4b6e;
-    font-size: 0.98em;
-    font-weight: 500;
-    border-radius: 999px;
-    padding: 0.35em 1.1em;
-    margin: 0 0.5em 0.7em 1.1em;
-    letter-spacing: 0.01em;
+    width: 14px;
+    height: 14px;
+    margin-right: 0.5em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23444' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .meta-recurrence {
-    background: #eaf8f1;
-    color: #1a6e3a;
+    color: #444;
+    font-size: 0.95em;
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 0 0 0.9em 0;
+    padding: 0 1.1em;
 }
 
 .pco-group-card .meta {
@@ -86,9 +140,13 @@
         gap: 1.5em;
     }
     .pco-group-card {
-        min-height: 0;
+        min-height: unset;
     }
     .pco-group-image img {
         height: 140px;
+    }
+    .pco-groups-filters {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
