@@ -130,7 +130,9 @@ function pco_groups_shortcode($atts) {
             </a>
         <?php endforeach; ?>
     </div>
-
+    <div id="pco-groups-no-results" style="display:none; text-align:center; margin:2em 0; color:#888;">
+        No groups found matching that criteria.
+    </div>
     <?php
     return ob_get_clean();
 }
@@ -257,75 +259,9 @@ function pco_integrations_groups_shortcode($atts) {
             </a>
         <?php endforeach; ?>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('pco-groups-search');
-        const typeSelect = document.getElementById('pco-groups-type');
-        const daySelect = document.getElementById('pco-groups-day');
-        const locationSelect = document.getElementById('pco-groups-location');
-        const cards = Array.from(document.querySelectorAll('.pco-group-card'));
-
-        // Helper to get unique values from currently visible cards
-        function getUniqueValues(attr) {
-            const values = new Set();
-            cards.forEach(card => {
-                if (card.style.display !== 'none') {
-                    values.add(card.getAttribute(attr));
-                }
-            });
-            return Array.from(values).filter(v => v); // remove empty
-        }
-
-        function updateDropdown(select, values, allLabel) {
-            const current = select.value;
-            select.innerHTML = `<option value="">${allLabel}</option>`;
-            values.forEach(val => {
-                const option = document.createElement('option');
-                option.value = val;
-                option.textContent = val;
-                select.appendChild(option);
-            });
-            // Restore selection if still available
-            if (values.includes(current)) select.value = current;
-        }
-
-        function filterCards() {
-            const term = searchInput.value.trim().toLowerCase();
-            const type = typeSelect.value;
-            const day = daySelect.value;
-            const location = locationSelect.value;
-            cards.forEach(card => {
-                const name = card.getAttribute('data-name');
-                const cardType = card.getAttribute('data-type');
-                const cardDay = card.getAttribute('data-day');
-                const cardLocation = card.getAttribute('data-location');
-                const matchesSearch = !term || name.includes(term);
-                const matchesType = !type || cardType === type;
-                const matchesDay = !day || cardDay === day;
-                const matchesLocation = !location || cardLocation === location;
-                card.style.display = (matchesSearch && matchesType && matchesDay && matchesLocation) ? '' : 'none';
-            });
-
-            // After filtering, update dropdowns to only show available options
-            // (except the one just changed)
-            const visibleTypes = getUniqueValues('data-type');
-            const visibleDays = getUniqueValues('data-day');
-            const visibleLocations = getUniqueValues('data-location');
-
-            if (document.activeElement !== typeSelect)
-                updateDropdown(typeSelect, visibleTypes, 'All Types');
-            if (document.activeElement !== daySelect)
-                updateDropdown(daySelect, visibleDays, 'All Days');
-            if (document.activeElement !== locationSelect)
-                updateDropdown(locationSelect, visibleLocations, 'All Locations');
-        }
-
-        searchInput.addEventListener('input', filterCards);
-        typeSelect.addEventListener('change', filterCards);
-        daySelect.addEventListener('change', filterCards);
-        locationSelect.addEventListener('change', filterCards);
-    });
-    </script>
+    <div id="pco-groups-no-results" style="display:none; text-align:center; margin:2em 0; color:#888;">
+        No groups found matching that criteria.
+    </div>
     <?php
     return ob_get_clean();
 }

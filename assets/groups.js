@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const daySelect = document.getElementById('pco-groups-day');
     const locationSelect = document.getElementById('pco-groups-location');
     const cards = Array.from(document.querySelectorAll('.pco-group-card'));
+    const noResults = document.getElementById('pco-groups-no-results');
 
     // Store all possible options for each dropdown
     const allTypes = Array.from(typeSelect.options).map(opt => opt.value).filter(v => v);
@@ -39,11 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const visibleDays = new Set();
         const visibleLocations = new Set();
 
-        // Always collect data for all cards, not just visible ones
-        const allVisibleTypes = new Set();
-        const allVisibleDays = new Set();
-        const allVisibleLocations = new Set();
-
         cards.forEach(card => {
             const name = card.getAttribute('data-name');
             const type = card.getAttribute('data-type');
@@ -58,12 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const isVisible = matchesSearch && matchesType && matchesDay && matchesLocation;
             card.style.display = isVisible ? '' : 'none';
 
-            // Always collect data for all cards, not just visible ones
-            if (type) allVisibleTypes.add(type);
-            if (day) allVisibleDays.add(day);
-            if (location) allVisibleLocations.add(location);
-
-            // Collect visible options for dropdowns
             if (isVisible) {
                 if (type) visibleTypes.add(type);
                 if (day) visibleDays.add(day);
@@ -71,9 +61,22 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        updateDropdown(typeSelect, allTypes.filter(t => visibleTypes.has(t)), 'All Types', typeof PCO_GROUP_TYPE_MAP !== 'undefined' ? PCO_GROUP_TYPE_MAP : null);
-        updateDropdown(daySelect, allDays.filter(d => visibleDays.has(d)), 'All Days');
-        updateDropdown(locationSelect, allLocations.filter(l => visibleLocations.has(l)), 'All Locations', typeof PCO_GROUP_LOCATION_MAP !== 'undefined' ? PCO_GROUP_LOCATION_MAP : null);
+        // Update dropdowns dynamically based on visible cards
+        if (triggeredBy !== typeSelect) {
+            updateDropdown(typeSelect, allTypes.filter(t => visibleTypes.has(t)), 'All Types', typeof PCO_GROUP_TYPE_MAP !== 'undefined' ? PCO_GROUP_TYPE_MAP : null);
+        }
+        if (triggeredBy !== daySelect) {
+            updateDropdown(daySelect, allDays.filter(d => visibleDays.has(d)), 'All Days');
+        }
+        if (triggeredBy !== locationSelect) {
+            updateDropdown(locationSelect, allLocations.filter(l => visibleLocations.has(l)), 'All Locations', typeof PCO_GROUP_LOCATION_MAP !== 'undefined' ? PCO_GROUP_LOCATION_MAP : null);
+        }
+
+        // Show/hide "no results" message
+        const anyVisible = cards.some(card => card.style.display !== 'none');
+        if (noResults) {
+            noResults.style.display = anyVisible ? 'none' : '';
+        }
     }
 
     // Attach event listeners to filters
@@ -84,11 +87,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial filtering to populate dropdowns
     filterCards();
-
-    // Watch for changes to reset dependent filters if no matching cards exist
-    [typeSelect, daySelect, locationSelect].forEach(select => {
-        select.addEventListener('change', function () {
-            filterCards();
-        });
-    });
 });
