@@ -265,6 +265,53 @@ function pco_events_register_settings() {
         'pco_events_styles_section_advanced'
     );
 
+    // --- GROUPS STYLE SETTINGS ---
+
+    // Register the settings group for groups styles
+    register_setting('pco_groups_style_settings_group', 'pco_groups_card_background');
+
+    // Add a section for group card styling
+    add_settings_section(
+        'pco_groups_styles_section_card',
+        'Group Card Styling',
+        null,
+        'pco-groups-styles'
+    );
+
+    // Add a sample field for group card background color
+    add_settings_field(
+        'pco_groups_card_background',
+        'Group Card Background Color',
+        function() {
+            echo '<input type="color" name="pco_groups_card_background" value="' . esc_attr(get_option('pco_groups_card_background', '#fafafa')) . '">';
+        },
+        'pco-groups-styles',
+        'pco_groups_styles_section_card'
+    );
+
+    add_settings_field(
+        'pco_groups_title_color',
+        'Group Title Color',
+        function() {
+            echo '<input type="color" name="pco_groups_title_color" value="' . esc_attr(get_option('pco_groups_title_color', '#1a1a1a')) . '">';
+        },
+        'pco-groups-styles',
+        'pco_groups_styles_section_card'
+    );
+
+    add_settings_field(
+        'pco_groups_text_color',
+        'Group Text Color',
+        function() {
+            echo '<input type="color" name="pco_groups_text_color" value="' . esc_attr(get_option('pco_groups_text_color', '#6b6b6b')) . '">';
+        },
+        'pco-groups-styles',
+        'pco_groups_styles_section_card'
+    );
+
+    register_setting('pco_groups_style_settings_group', 'pco_groups_title_color');
+    register_setting('pco_groups_style_settings_group', 'pco_groups_text_color');
+
     if (is_admin() && isset($_GET['page']) && $_GET['page'] === 'pco-events-settings') {
         $license_key = get_option('pco_events_license_key');
         $license_status = get_option('pco_events_license_status');

@@ -50,6 +50,14 @@ function pco_groups_shortcode($atts) {
         return array_search($a, $weekdays) - array_search($b, $weekdays);
     });
 
+    // Output CSS variables for group card styles
+    echo '<style>
+    .pco-group-card {
+        --pco-group-bg: ' . esc_attr(get_option('pco_groups_card_background', '#fff')) . ';
+        --pco-group-title: ' . esc_attr(get_option('pco_groups_title_color', '#1a1a1a')) . ';
+        --pco-group-text: ' . esc_attr(get_option('pco_groups_text_color', '#6b6b6b')) . ';
+    }
+    </style>';
     ?>
     <script>
     const PCO_GROUP_TYPE_MAP = <?php echo json_encode($group_types); ?>;

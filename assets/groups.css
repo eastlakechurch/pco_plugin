@@ -50,7 +50,7 @@
 }
 
 .pco-group-card {
-    background: #fff;
+    background: var(--pco-group-bg, #fff);
     border-radius: 18px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.03);
     overflow: hidden;
@@ -85,12 +85,12 @@
     font-weight: 700;
     margin: 0.9em 0 0.4em 0;
     padding: 0 1.1em;
-    color: #1a1a1a;
+    color: var(--pco-group-title, #1a1a1a);
     line-height: 1.2;
 }
 
 .pco-group-card .desc {
-    color: #6b6b6b;
+    color: var(--pco-group-text, #6b6b6b);
     font-size: 0.95em;
     line-height: 1.45;
     margin: 0 0 1em 0;
@@ -121,7 +121,7 @@
 }
 
 .meta-recurrence {
-    color: #444;
+    color: var(--pco-group-text, #6b6b6b);
     font-size: 0.95em;
     font-weight: 400;
     line-height: 1.4;
