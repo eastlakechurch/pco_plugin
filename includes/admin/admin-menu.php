@@ -128,9 +128,9 @@ function pco_events_settings_page() {
         <?php endif; ?>
 
         <form method="post" action="">
-            <?php wp_nonce_field('pco_events_refresh_cache', 'pco_events_nonce'); ?>
-            <?php submit_button('Refresh Event Cache', 'secondary', 'pco_refresh_cache'); ?>
-        </form>
+    <?php wp_nonce_field('pco_events_refresh_cache', 'pco_events_nonce'); ?>
+    <?php submit_button('Refresh Cache', 'secondary', 'pco_refresh_cache'); ?>
+</form>
     </div>
     <?php
 }
@@ -396,3 +396,24 @@ function pco_events_shortcode_generator_page() {
     </div>
     <?php
 }
+
+// Handle cache refresh for both events and groups
+add_action('admin_init', function() {
+    if (
+        isset($_POST['pco_refresh_cache']) &&
+        check_admin_referer('pco_events_refresh_cache', 'pco_events_nonce')
+    ) {
+        // Clear event cache (existing logic, if any)
+        global $wpdb;
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_pco_events_%' OR option_name LIKE '_transient_timeout_pco_events_%'");
+
+        // Clear group cache
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_pco_groups_%' OR option_name LIKE '_transient_timeout_pco_groups_%'");
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_pco_group_location_%' OR option_name LIKE '_transient_timeout_pco_group_location_%'");
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_pco_group_types%' OR option_name LIKE '_transient_timeout_pco_group_types%'");
+
+        set_transient('pco_events_settings_success', 'Event and group cache cleared.', 10);
+        wp_safe_redirect(admin_url('admin.php?page=pco-events-settings'));
+        exit;
+    }
+});
