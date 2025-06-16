@@ -65,34 +65,97 @@ function pco_events_about_page() {
     ?>
     <div class="wrap">
         <h1>About PCO Integrations</h1>
-        <p>This plugin integrates your WordPress site with Planning Center to display upcoming events.</p>
+
+        <p><strong>PCO Integrations</strong> is a plugin that connects your WordPress site to Planning Center, allowing you to display Events, Groups, and Sermons with zero manual syncing.</p>
+
+        <hr>
+
+        <h2>Getting Started</h2>
+        <ol>
+            <li>Go to <strong>PCO Integrations > Settings</strong> in your WordPress Dashboard.</li>
+            <li>Enter your Planning Center API Username and Password.</li>
+            <li>Enter your plugin License Key (provided on purchase or signup).</li>
+            <li>Click <strong>Test Connection</strong> to verify your API access.</li>
+            <li>Once validated, you're ready to use the plugin!</li>
+        </ol>
+
+        <p><strong>Note:</strong> If your API connection fails, please check credentials and firewall restrictions. You can regenerate your credentials from the <a href="https://api.planningcenteronline.com/oauth/applications" target="_blank">Planning Center Developer Dashboard</a>.</p>
+
+        <hr>
+
         <h2>Shortcodes</h2>
-        <p>Use these shortcodes anywhere in your pages or posts, or use the <strong>Shortcode Generator</strong> tab to easily build and copy a shortcode for:</p>
+
+        <h3>📅 Events</h3>
+        <p>Display upcoming events synced from Planning Center Calendar.</p>
         <ul>
-            <li>
-                <code>[pco_events]</code> – shows all upcoming events.
-            </li>
-            <li>
-                <code>[pco_events tags="Youth,Sunday"]</code> – filter events by one or more tags.
-            </li>
-            <li>
-                <code>[pco_events start="2025-06-01" end="2025-06-30"]</code> – filter events by date range.
-            </li>
-            <li>
-                <code>[pco_event id="INSTANCE_ID" type="instance"]</code> – show a single event instance (use the generator to select).
-            </li>
-            <li>
-                <code>[pco_event id="EVENT_ID" type="event"]</code> – show a single event by Event ID (shows next upcoming instance).
-            </li>
-            <li>
-                <code>[pco_events show_description="false"]</code> – hides the event description.
-            </li>
+            <li><code>[pco_events]</code> – All upcoming events.</li>
+            <li><code>[pco_events tags="Youth,Sunday"]</code> – Filter by tag(s).</li>
+            <li><code>[pco_events start="2025-06-01" end="2025-06-30"]</code> – Filter by date range.</li>
+            <li><code>[pco_events show_description="false"]</code> – Hide event descriptions.</li>
+            <li><code>[pco_event id="INSTANCE_ID" type="instance"]</code> – Single event instance.</li>
+            <li><code>[pco_event id="EVENT_ID" type="event"]</code> – Show next instance of recurring event.</li>
         </ul>
-        <p>
-            <strong>Tip:</strong> Use the <strong>Shortcode Generator</strong> tab to select tags, date ranges, or a single event and copy the exact shortcode you need—no need to look up IDs manually!
-        </p>
-        <h2>Cache Refresh</h2>
-        <p>To force the plugin to refresh the event list (bypassing the cache), add <code>?refresh=true</code> to your page URL.</p>
+
+        <h3>👥 Groups</h3>
+        <p>Display your church groups in a filterable, searchable layout.</p>
+        <ul>
+            <li><code>[pco_groups]</code> – Display all active groups with filters by type, day, and location.</li>
+        </ul>
+
+        <h3>🎤 Sermons</h3>
+        <p>Display the latest sermon from Planning Center Publishing.</p>
+        <ul>
+            <li><code>[pco_sermon]</code> – Show the most recent sermon automatically (updates weekly).</li>
+        </ul>
+
+        <hr>
+
+        <h2>Using the Shortcode Generator</h2>
+        <p>Not sure how to build a shortcode? Use the <strong>Shortcode Generator</strong> tab:</p>
+        <ol>
+            <li>Go to <strong>PCO Integrations > Shortcode Generator</strong>.</li>
+            <li>Select filters like Tags, Dates, or a specific Event.</li>
+            <li>Toggle options like hiding images or tags.</li>
+            <li>Copy and paste the generated shortcode into any page or post.</li>
+        </ol>
+
+        <hr>
+
+        <h2>Styling the Plugin</h2>
+        <p>Under the <strong>Styles</strong> tab, you can adjust colors, fonts, and layout settings for how events, groups, and sermons appear. These styles apply globally.</p>
+
+        <hr>
+
+        <h2>Cache & Refresh</h2>
+        <p>To improve speed, the plugin caches your data. You can manually refresh the data:</p>
+        <ul>
+            <li>Go to <strong>Settings</strong> and click <strong>Refresh Cache</strong>.</li>
+            <li>Or add <code>?refresh=true</code> to any page URL to force a live refresh.</li>
+        </ul>
+
+        <hr>
+
+        <h2>License & Activation</h2>
+        <ul>
+            <li>Enter your License Key under <strong>Settings</strong>.</li>
+            <li>Click <strong>Test Connection</strong> to verify it's active.</li>
+            <li>You can also <strong>Deactivate</strong> the key for use on a different site.</li>
+        </ul>
+        <p>If your license is invalid or expired, some plugin functionality may be restricted.</p>
+
+        <hr>
+
+        <h2>Troubleshooting</h2>
+        <ul>
+            <li><strong>No events or groups showing?</strong> Check your API credentials and refresh the cache.</li>
+            <li><strong>License not activating?</strong> Confirm your key is correct and hasn’t been used on another site.</li>
+            <li><strong>Sermon not updating?</strong> Make sure a new sermon is uploaded in Planning Center Publishing before Monday 6pm.</li>
+        </ul>
+
+        <hr>
+
+        <h2>Support</h2>
+        <p>For help or feedback, contact us via <a href="mailto:josh@pcointegrations.com">josh@pcointegrations.com</a> or visit <a href="https://www.pcointegrations.com" target="_blank">pcointegrations.com</a>.</p>
     </div>
     <?php
 }
