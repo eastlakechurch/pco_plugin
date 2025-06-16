@@ -341,6 +341,9 @@ function pco_events_register_settings() {
     // Register settings for sermons cache refresh schedule
     register_setting('pco_sermons_settings_group', 'pco_sermons_cache_refresh_day');
     register_setting('pco_sermons_settings_group', 'pco_sermons_cache_refresh_time');
+    // Register new sermon autoplay options
+    register_setting('pco_sermons_settings_group', 'pco_sermons_autoplay');
+    register_setting('pco_sermons_settings_group', 'pco_sermons_autoplay_delay');
 
     // Add settings section if not already present
     add_settings_section(
