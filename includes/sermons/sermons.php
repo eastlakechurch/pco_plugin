@@ -178,6 +178,9 @@ function pcp_video_shortcode() {
     // Convert to YouTube embed URL.
     $embed_url = pcp_convert_youtube_url( $video_url );
 
+    $autoplay = get_option('pco_sermons_autoplay', 1);
+    $delay = intval( get_option('pco_sermons_autoplay_delay', 2) );
+
     ob_start();
     ?>
     <div class="pcp-video-container" style="position: relative; width: 100%; margin: auto;">
@@ -189,9 +192,10 @@ function pcp_video_shortcode() {
             console.log("Replacing thumbnail with YouTube video. Embed URL: <?php echo esc_js( $embed_url ); ?>");
             var container = document.getElementById("pcp-video-thumb");
             if (container) {
-                container.innerHTML = '<iframe src="<?php echo esc_url( $embed_url ); ?>?autoplay=1&mute=1&modestbranding=1&rel=0&playsinline=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;"></iframe>';
+                container.innerHTML = '<iframe src="<?php echo esc_url( $embed_url ); ?>?' +
+                    '<?php echo $autoplay ? 'autoplay=1&mute=1&' : ''; ?>modestbranding=1&rel=0&playsinline=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;"></iframe>';
             }
-        }, 2000); // Delay reduced to 2 seconds
+        }, <?php echo esc_js( $delay * 1000 ); ?>); // Delay from settings
     </script>
     <?php
     return ob_get_clean();
@@ -283,6 +287,24 @@ function pco_sermons_settings_page() {
             <?php
             settings_fields('pco_sermons_settings_group');
             do_settings_sections('pco-sermons-settings');
+            ?>
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">Autoplay Video</th>
+                    <td>
+                        <input type="checkbox" name="pco_sermons_autoplay" value="1" <?php checked( get_option('pco_sermons_autoplay', 1 ), 1 ); ?> />
+                        <label for="pco_sermons_autoplay">Enable autoplay when video loads</label>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">Autoplay Delay (seconds)</th>
+                    <td>
+                        <input type="number" name="pco_sermons_autoplay_delay" value="<?php echo esc_attr( get_option('pco_sermons_autoplay_delay', 2) ); ?>" min="0" />
+                        <p class="description">Delay in seconds before replacing thumbnail with video.</p>
+                    </td>
+                </tr>
+            </table>
+            <?php
             submit_button();
             ?>
         </form>

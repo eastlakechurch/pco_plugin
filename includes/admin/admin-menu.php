@@ -105,7 +105,9 @@ function pco_events_about_page() {
         <h3>🎤 Sermons</h3>
         <p>Display the latest sermon from Planning Center Publishing.</p>
         <ul>
-            <li><code>[pco_sermon]</code> – Show the most recent sermon automatically (updates weekly).</li>
+            <li><code>[planning_centre_video]</code> – Show the most recent sermon automatically.</li>
+            <li><code>[planning_centre_title]</code> – Use the most recent sermon title on your page.</li>
+            <li><code>[planning_centre_published]</code> – Use the most recent sermon date on your page.</li>
         </ul>
 
         <hr>
@@ -164,6 +166,8 @@ function pco_events_settings_page() {
     ?>
     <div class="wrap">
         <h1>PCO Integrations Settings</h1>
+        <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+            <div style="flex:1;min-width:300px;">
         <?php
         $username = pco_events_decrypt(get_option('pco_events_username'));
         $password = pco_events_decrypt(get_option('pco_events_password'));
@@ -203,6 +207,30 @@ function pco_events_settings_page() {
     <?php wp_nonce_field('pco_events_refresh_cache', 'pco_events_nonce'); ?>
     <?php submit_button('Refresh Cache', 'secondary', 'pco_refresh_cache'); ?>
 </form>
+            </div>
+            <div style="flex:1;min-width:300px;max-width:500px;background:#f9f9f9;padding:20px;border-left:3px solid #2271b1;">
+                <h2>How to Get Your Planning Center API Token</h2>
+                <p>To connect your Planning Center account to this app, you’ll need a Personal Access Token. It’s easy and takes less than a minute.</p>
+                <ol>
+                    <li><strong>Log in to Planning Center</strong><br>
+                        Go to <a href="https://api.planningcenteronline.com/oauth/applications" target="_blank">this link</a> and log in.
+                    </li>
+                    <li><strong>Go to “Developer” Settings</strong><br>
+                        Click your profile photo top right &gt; Choose “Developer.”
+                    </li>
+                    <li><strong>Create a Personal Access Token</strong><br>
+                        Scroll to the Personal Access Tokens section and click “New Personal Access Token.”
+                    </li>
+                    <li><strong>Name the Token</strong><br>
+                        Use a name like “PCO Integrations Plugin” and click “Create Token.”
+                    </li>
+                    <li><strong>Copy Your Token</strong><br>
+                        You’ll see it once – copy it and paste it into this plugin's settings.
+                    </li>
+                </ol>
+                <p><strong>⚠️ Keep this token secure.</strong><br>Don’t share it publicly or post it online.</p>
+            </div>
+        </div>
     </div>
     <?php
 }
