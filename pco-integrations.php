@@ -26,6 +26,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/admin/license.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/admin-menu.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin/preview.php';
 require_once plugin_dir_path(__FILE__) . 'includes/groups/groups-api.php';
+require_once plugin_dir_path(__FILE__) . 'includes/sermons/sermons.php';
 require_once plugin_dir_path(__FILE__) . 'includes/groups/groups-shortcodes.php';
 
 add_action('admin_notices', 'pco_events_admin_notices');

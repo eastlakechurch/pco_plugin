@@ -49,6 +49,15 @@ function pco_events_admin_menu() {
         'pco-events-shortcode-generator',
         'pco_events_shortcode_generator_page'
     );
+
+    add_submenu_page(
+        'pco-events',
+        'Sermons Settings',
+        'Sermons',
+        'manage_options',
+        'pco-sermons-settings',
+        'pco_sermons_settings_page'
+    );
 }
 
 // About page content
