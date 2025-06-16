@@ -272,11 +272,40 @@ add_action( 'init', 'pcp_manual_update_trigger' );
  * This function outputs the HTML for the Sermons settings page.
  */
 function pco_sermons_settings_page() {
+    if ($msg = get_transient('pco_sermons_settings_success')) {
+        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html($msg) . '</p></div>';
+        delete_transient('pco_sermons_settings_success');
+    }
     ?>
     <div class="wrap">
         <h1>Sermons Settings</h1>
-        <p>This section will contain settings and documentation for the Sermons integration.</p>
-        <!-- Add settings fields here if needed in the future -->
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('pco_sermons_settings_group');
+            do_settings_sections('pco-sermons-settings');
+            submit_button();
+            ?>
+        </form>
+        <form method="post">
+            <?php wp_nonce_field('pco_sermons_refresh_cache', 'pco_sermons_nonce'); ?>
+            <?php submit_button('Refresh Sermons Cache', 'secondary', 'pco_sermons_refresh_cache'); ?>
+        </form>
     </div>
     <?php
 }
+
+// Handle manual sermons cache refresh
+add_action('admin_init', function() {
+    if (
+        isset($_POST['pco_sermons_refresh_cache']) &&
+        check_admin_referer('pco_sermons_refresh_cache', 'pco_sermons_nonce')
+    ) {
+        global $wpdb;
+        // Remove all sermons-related transients
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_pco_sermons_%' OR option_name LIKE '_transient_timeout_pco_sermons_%'");
+        // Optionally, add a notice
+        set_transient('pco_sermons_settings_success', 'Sermons cache cleared.', 10);
+        wp_safe_redirect(admin_url('admin.php?page=pco-sermons-settings'));
+        exit;
+    }
+});

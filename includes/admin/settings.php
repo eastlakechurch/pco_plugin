@@ -337,6 +337,48 @@ function pco_events_register_settings() {
             }
         }
     }
+
+    // Register settings for sermons cache refresh schedule
+    register_setting('pco_sermons_settings_group', 'pco_sermons_cache_refresh_day');
+    register_setting('pco_sermons_settings_group', 'pco_sermons_cache_refresh_time');
+
+    // Add settings section if not already present
+    add_settings_section(
+        'pco_sermons_cache_section',
+        'Sermons Cache Refresh Schedule',
+        null,
+        'pco-sermons-settings'
+    );
+
+    // Day of week dropdown
+    add_settings_field(
+        'pco_sermons_cache_refresh_day',
+        'Cache Refresh Day',
+        function() {
+            $days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            $selected = get_option('pco_sermons_cache_refresh_day', 'Monday');
+            echo '<select name="pco_sermons_cache_refresh_day">';
+            foreach ($days as $day) {
+                echo '<option value="' . esc_attr($day) . '"' . selected($selected, $day, false) . '>' . esc_html($day) . '</option>';
+            }
+            echo '</select>';
+        },
+        'pco-sermons-settings',
+        'pco_sermons_cache_section'
+    );
+
+    // Time input (24-hour format)
+    add_settings_field(
+        'pco_sermons_cache_refresh_time',
+        'Cache Refresh Time',
+        function() {
+            $value = get_option('pco_sermons_cache_refresh_time', '18:00');
+            echo '<input type="time" name="pco_sermons_cache_refresh_time" value="' . esc_attr($value) . '">';
+            echo '<p class="description">Set the time (24-hour) for cache refresh, e.g. 18:00 for 6:00pm.</p>';
+        },
+        'pco-sermons-settings',
+        'pco_sermons_cache_section'
+    );
 }
 
 function pco_username_field_html() {
