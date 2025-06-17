@@ -344,6 +344,7 @@ function pco_events_register_settings() {
     // Register new sermon autoplay options
     register_setting('pco_sermons_settings_group', 'pco_sermons_autoplay');
     register_setting('pco_sermons_settings_group', 'pco_sermons_autoplay_delay');
+    register_setting('pco_sermons_settings_group', 'pco_sermons_channel_id');
 
     // Add settings section if not already present
     add_settings_section(

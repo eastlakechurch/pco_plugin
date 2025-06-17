@@ -50,7 +50,11 @@ function pcp_fetch_latest_episode() {
  * @return array|false
  */
 function pcp_update_latest_episode() {
-    $api_url = 'https://api.planningcenteronline.com/publishing/v2/episodes';
+    $channel_id = get_option('pco_sermons_channel_id');
+    $api_url = $channel_id
+        ? 'https://api.planningcenteronline.com/publishing/v2/channels/' . $channel_id . '/episodes'
+        : 'https://api.planningcenteronline.com/publishing/v2/episodes';
+
     $args = array(
         'headers' => array(
             'Authorization' => 'Basic ' . base64_encode( PCP_TOKEN_ID . ':' . PCP_TOKEN_SECRET )
@@ -72,6 +76,10 @@ function pcp_update_latest_episode() {
 
     $body = wp_remote_retrieve_body( $response );
     $data = json_decode( $body, true );
+
+    if ( empty($channel_id) && isset($data['data'][0]['relationships']['channel']['data']['id']) ) {
+        error_log('Detected default Publishing Channel ID: ' . $data['data'][0]['relationships']['channel']['data']['id']);
+    }
 
     if ( isset( $data['data'] ) && is_array( $data['data'] ) && ! empty( $data['data'] ) ) {
         $episodes = $data['data'];
@@ -290,6 +298,13 @@ function pco_sermons_settings_page() {
             ?>
             <table class="form-table">
                 <tr valign="top">
+                    <th scope="row">Publishing Channel ID</th>
+                    <td>
+                        <input type="text" name="pco_sermons_channel_id" value="<?php echo esc_attr( get_option('pco_sermons_channel_id', '') ); ?>" />
+                        <p class="description">Enter your Planning Center Publishing Channel ID. Example: <code>123456</code></p>
+                    </td>
+                </tr>
+                <tr valign="top">
                     <th scope="row">Autoplay Video</th>
                     <td>
                         <input type="checkbox" name="pco_sermons_autoplay" value="1" <?php checked( get_option('pco_sermons_autoplay', 1 ), 1 ); ?> />
@@ -315,6 +330,7 @@ function pco_sermons_settings_page() {
     </div>
     <?php
 }
+
 
 // Handle manual sermons cache refresh
 add_action('admin_init', function() {
