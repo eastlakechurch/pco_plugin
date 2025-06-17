@@ -5,6 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+function pcp_license_message() {
+    return '<p><strong>This plugin is not activated. Please enter a valid license key in the settings page.</strong></p>';
+}
+
 // Use the main plugin's encrypted API credentials
 $token_id = pco_events_decrypt(get_option('pco_events_username'));
 $token_secret = pco_events_decrypt(get_option('pco_events_password'));
@@ -170,6 +174,11 @@ function pcp_convert_youtube_url( $url ) {
  * @return string The video embed HTML.
  */
 function pcp_video_shortcode() {
+    $license_status = get_option('pco_events_license_status');
+    if ($license_status !== 'valid') {
+        return pcp_license_message();
+    }
+
     $episode = pcp_fetch_latest_episode();
     if ( ! $episode ) {
         return '<p>No episode found.</p>';
@@ -218,6 +227,11 @@ add_shortcode( 'planning_centre_video', 'pcp_video_shortcode' );
  * @return string The episode title.
  */
 function pcp_title_shortcode() {
+    $license_status = get_option('pco_events_license_status');
+    if ($license_status !== 'valid') {
+        return pcp_license_message();
+    }
+
     $episode = pcp_fetch_latest_episode();
     if ( ! $episode ) {
         return '<p>No episode found.</p>';
@@ -237,6 +251,11 @@ add_shortcode( 'planning_centre_title', 'pcp_title_shortcode' );
  * @return string The formatted published date.
  */
 function pcp_published_shortcode() {
+    $license_status = get_option('pco_events_license_status');
+    if ($license_status !== 'valid') {
+        return pcp_license_message();
+    }
+
     $episode = pcp_fetch_latest_episode();
     if ( ! $episode ) {
         return '<p>No episode found.</p>';
