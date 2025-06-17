@@ -6,6 +6,9 @@
 		{
 			"name": "pco-events-updates",
 			"path": "../../pco-events-updates"
+		},
+		{
+			"path": "../../pco_license"
 		}
 	],
 	"settings": {}

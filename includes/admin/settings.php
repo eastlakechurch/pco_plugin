@@ -399,4 +399,19 @@ function pco_events_license_key_field_html() {
     $value = get_option('pco_events_license_key');
     echo '<input type="text" name="pco_events_license_key" value="' . esc_attr($value) . '" style="width: 400px;">';
     echo "<p class='description'>Enter the license key provided after purchase.</p>";
+
+    // Real-time license validation display
+    $status = get_option('pco_events_license_status');
+    if ($status === 'valid') {
+        $response = wp_remote_get('https://pcointegrations.com/api/validate-license.php?key=' . urlencode($value));
+        if (!is_wp_error($response)) {
+            $body = json_decode(wp_remote_retrieve_body($response), true);
+            $expires = $body['expires_at'] ?? 'Unknown';
+            echo '<p style="color: green;"><strong>✔ Valid license.</strong> Expires: ' . esc_html($expires) . '</p>';
+        } else {
+            echo '<p style="color: orange;">License check failed. Please try again later.</p>';
+        }
+    } elseif ($status === 'invalid') {
+        echo '<p style="color: red;"><strong>✖ Invalid license key.</strong></p>';
+    }
 }

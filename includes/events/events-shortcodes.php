@@ -2,6 +2,10 @@
 // Add this as the first line in all PHP files except the main plugin file
 if (!defined('ABSPATH')) exit;
 
+function pco_events_license_message() {
+    return '<p><strong>This plugin is not activated. Please enter a valid license key in the settings page.</strong></p>';
+}
+
 // Shortcode usage:
 // [pco_events] — show all events
 // [pco_events tags="tag1,tag2" start="YYYY-MM-DD" end="YYYY-MM-DD"] — filter by tags and/or date range
@@ -16,7 +20,7 @@ function pco_events_all($atts) {
     error_log('License status on shortcode render (all): ' . $license_status);
 
     if ($license_status !== 'valid') {
-        return '<p><strong>This plugin is not activated. Please enter a valid license key in the settings page.</strong></p>';
+        return pco_events_license_message();
     }
 
     $atts = shortcode_atts([
@@ -38,7 +42,7 @@ function pco_events_featured($atts) {
     error_log('License status on shortcode render (featured): ' . $license_status);
 
     if ($license_status !== 'valid') {
-        return '<p><strong>This plugin is not activated. Please enter a valid license key in the settings page.</strong></p>';
+        return pco_events_license_message();
     }
 
     $atts = shortcode_atts([
@@ -61,7 +65,7 @@ add_shortcode('pco_featured_events', 'pco_events_featured');
 function pco_events_single($atts) {
     $license_status = get_option('pco_events_license_status');
     if ($license_status !== 'valid') {
-        return '<p><strong>This plugin is not activated. Please enter a valid license key in the settings page.</strong></p>';
+        return pco_events_license_message();
     }
 
     $atts = shortcode_atts([

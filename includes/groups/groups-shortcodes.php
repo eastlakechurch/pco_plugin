@@ -1,9 +1,18 @@
 <?php
+
 if (!defined('ABSPATH')) exit;
+
+function pco_groups_license_message() {
+    return '<p><strong>This plugin is not activated. Please enter a valid license key in the settings page.</strong></p>';
+}
 
 add_shortcode('pco_groups', 'pco_groups_shortcode');
 
 function pco_groups_shortcode($atts) {
+    $license_status = get_option('pco_events_license_status');
+    if ($license_status !== 'valid') {
+        return pco_groups_license_message();
+    }
     wp_enqueue_style('pco-groups-style');
     wp_enqueue_script('pco-groups-script');
     $groups = pco_groups_fetch_groups();
@@ -148,6 +157,10 @@ function pco_groups_shortcode($atts) {
 add_shortcode('pco_integrations_groups', 'pco_integrations_groups_shortcode');
 
 function pco_integrations_groups_shortcode($atts) {
+    $license_status = get_option('pco_events_license_status');
+    if ($license_status !== 'valid') {
+        return pco_groups_license_message();
+    }
     wp_enqueue_style('pco-groups-style');
     wp_enqueue_script('pco-groups-script');
     $groups = pco_integrations_groups_fetch_groups();

@@ -20,38 +20,30 @@ function pco_events_handle_license_actions() {
 }
 
 function pco_events_validate_license_key($license_key) {
-    // Use the constants directly, no fallback to get_option()
-    $api_key = PCO_EVENTS_LS_API_KEY;
-    $product_id = PCO_EVENTS_LS_PRODUCT_ID;
-
-    if (empty($api_key) || empty($product_id) || empty($license_key)) {
+    if (empty($license_key)) {
         return false;
     }
 
-    $url = 'https://api.lemonsqueezy.com/v1/licenses/validate';
-    $args = [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $api_key,
-            'Content-Type'  => 'application/json',
-        ],
-        'body' => json_encode([
-            'license_key' => $license_key,
-            'product_id'  => $product_id,
-        ]),
-        'timeout' => 10,
-    ];
+    // Check cached validation result
+    $cached_status = get_transient('pco_events_license_status_cache');
+    if ($cached_status !== false) {
+        return $cached_status === 'valid';
+    }
 
-    $response = wp_remote_post($url, $args);
+    $site_url = home_url();
+    $url = 'https://pcointegrations.com/validate-license.php?key=' . urlencode($license_key) . '&site=' . urlencode($site_url);
+    $response = wp_remote_get($url, ['timeout' => 10]);
+
     if (is_wp_error($response)) {
         return false;
     }
 
-    $code = wp_remote_retrieve_response_code($response);
     $body = json_decode(wp_remote_retrieve_body($response), true);
-    error_log('PCO License Validation Response: ' . print_r($body, true));
+    $is_valid = isset($body['valid']) && $body['valid'] === true;
 
-    $is_valid = $code === 200 && !empty($body['valid']) && $body['valid'] === true;
     update_option('pco_events_license_status', $is_valid ? 'valid' : 'invalid');
+    set_transient('pco_events_license_status_cache', $is_valid ? 'valid' : 'invalid', DAY_IN_SECONDS);
+
     return $is_valid;
 }
 
@@ -60,3 +52,12 @@ add_action('update_option_pco_events_license_key', function($old_value, $new_val
         pco_events_validate_license_key($new_value);
     }
 }, 10, 2);
+
+// Display admin notice if license is invalid
+add_action('admin_notices', function () {
+    if (!current_user_can('manage_options')) return;
+    $status = get_option('pco_events_license_status');
+    if ($status !== 'valid') {
+        echo '<div class="notice notice-error"><p><strong>PCO Integrations Plugin:</strong> Your license key is invalid or missing. Please enter a valid license in <a href="' . esc_url(admin_url('options-general.php?page=pco-events-settings')) . '">plugin settings</a>.</p></div>';
+    }
+});
