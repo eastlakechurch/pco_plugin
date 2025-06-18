@@ -2,7 +2,7 @@
 /*
 Plugin Name: PCO Integrations for WordPress
 Description: Integrate Planning Center with WordPress for events, groups, and publishing. Display and filter upcoming Planning Center data using shortcodes. Includes caching, tags, and recurring event support.
-Version: 1.1.3
+Version: 1.2.1
 Author: Josh Edwards
 Plugin URI: https://github.com/eastlakechurch/pco_plugin
 License: GPL-2.0+
