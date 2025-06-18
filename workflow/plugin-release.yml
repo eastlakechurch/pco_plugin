@@ -1,0 +1,41 @@
+name: Plugin Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Triggers on version tags like v1.0.0
+
+jobs:
+  build-and-release:
+    name: Build Plugin ZIP and Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up plugin name and version
+        id: vars
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          PLUGIN_NAME="pco_plugin"
+          ZIP_NAME="${PLUGIN_NAME}-${TAG_NAME}.zip"
+          echo "plugin_name=${PLUGIN_NAME}" >> $GITHUB_OUTPUT
+          echo "zip_name=${ZIP_NAME}" >> $GITHUB_OUTPUT
+          echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Zip plugin folder
+        run: |
+          cd ${{ steps.vars.outputs.plugin_name }}
+          zip -r ../${{ steps.vars.outputs.zip_name }} ./*
+          cd ..
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ steps.vars.outputs.tag_name }}
+          tag_name: ${{ steps.vars.outputs.tag_name }}
+          generate_release_notes: true
+          files: ${{ steps.vars.outputs.zip_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
