@@ -107,7 +107,7 @@ function pcp_update_latest_episode() {
  * If the URL query parameter "pcp_debug=1" is appended, output the raw API response.
  */
 function pcp_debug_output() {
-    if ( isset( $_GET['pcp_debug'] ) && '1' === $_GET['pcp_debug'] ) {
+    if ( isset( $_GET['pcp_debug'] ) && '1' === sanitize_text_field( $_GET['pcp_debug'] ) ) {
         // Output decrypted credentials for debug
         $token_id = pco_events_decrypt(get_option('pco_events_username'));
         $token_secret = pco_events_decrypt(get_option('pco_events_password'));
@@ -294,7 +294,7 @@ add_shortcode( 'planning_centre_published', 'pcp_published_shortcode' );
 
 // Manual Update Trigger: Visit ?pcp_update=1 to force update
 function pcp_manual_update_trigger() {
-    if ( isset( $_GET['pcp_update'] ) && '1' === $_GET['pcp_update'] ) {
+    if ( isset( $_GET['pcp_update'] ) && '1' === sanitize_text_field( $_GET['pcp_update'] ) ) {
         $episode = pcp_update_latest_episode();
 
         echo '<div style="background: #e0ffe0; border: 1px solid #00aa00; padding: 20px; margin: 20px; font-size: 18px;">';

@@ -7,8 +7,8 @@ add_action('admin_init', 'pco_events_handle_license_actions');
 function pco_events_handle_license_actions() {
     if (!current_user_can('manage_options')) return;
 
-    if (isset($_POST['pco_deactivate_license'])) {
-        if (!isset($_POST['pco_events_nonce']) || !wp_verify_nonce($_POST['pco_events_nonce'], 'pco_events_deactivate_license')) {
+    if (isset($_POST['pco_deactivate_license']) && sanitize_text_field($_POST['pco_deactivate_license'])) {
+        if (!isset($_POST['pco_events_nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['pco_events_nonce']), 'pco_events_deactivate_license')) {
             wp_die('Security check failed');
         }
 

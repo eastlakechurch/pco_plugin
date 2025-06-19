@@ -501,7 +501,7 @@ function pco_events_shortcode_generator_page() {
 add_action('admin_init', function() {
     if (
         isset($_POST['pco_refresh_cache']) &&
-        check_admin_referer('pco_events_refresh_cache', 'pco_events_nonce')
+        check_admin_referer('pco_events_refresh_cache', sanitize_text_field($_POST['pco_events_nonce']))
     ) {
         // Clear event cache (existing logic, if any)
         global $wpdb;

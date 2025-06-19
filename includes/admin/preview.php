@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) exit;
 
 function pco_events_styles_page() {
     if (isset($_POST['pco_events_reset_styles'])) {
-        if (!isset($_POST['pco_events_nonce']) || !wp_verify_nonce($_POST['pco_events_nonce'], 'pco_events_reset_styles')) {
+        if (!isset($_POST['pco_events_nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['pco_events_nonce']), 'pco_events_reset_styles')) {
             wp_die('Security check failed');
         }
         delete_option('pco_events_primary_color');
@@ -15,7 +15,7 @@ function pco_events_styles_page() {
 
     // --- GROUPS RESET LOGIC ---
     if (isset($_POST['pco_groups_reset_styles'])) {
-        if (!isset($_POST['pco_groups_nonce']) || !wp_verify_nonce($_POST['pco_groups_nonce'], 'pco_groups_reset_styles')) {
+        if (!isset($_POST['pco_groups_nonce']) || !wp_verify_nonce(sanitize_text_field($_POST['pco_groups_nonce']), 'pco_groups_reset_styles')) {
             wp_die('Security check failed');
         }
         delete_option('pco_groups_card_background');
@@ -25,7 +25,7 @@ function pco_events_styles_page() {
     }
 
     // Determine active tab
-    $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'events';
+    $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'events';
     ?>
     <div class="wrap">
         <h1>PCO Integrations – Styles</h1>

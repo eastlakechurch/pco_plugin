@@ -312,7 +312,7 @@ function pco_events_register_settings() {
     register_setting('pco_groups_style_settings_group', 'pco_groups_title_color');
     register_setting('pco_groups_style_settings_group', 'pco_groups_text_color');
 
-    if (is_admin() && isset($_GET['page']) && $_GET['page'] === 'pco-events-settings') {
+    if (is_admin() && isset($_GET['page']) && sanitize_text_field($_GET['page']) === 'pco-events-settings') {
         $license_key = get_option('pco_events_license_key');
         $license_status = get_option('pco_events_license_status');
 
@@ -327,8 +327,11 @@ function pco_events_register_settings() {
     }
 
     // Validate license key immediately after it's saved and update license status.
-    if (is_admin() && isset($_POST['option_page']) && $_POST['option_page'] === 'pco_events_settings_group') {
-        if (isset($_POST['pco_events_license_key']) || isset($_POST['pco_refresh_license_submit'])) {
+    if (current_user_can('manage_options') && is_admin() && isset($_POST['option_page']) && sanitize_text_field($_POST['option_page']) === 'pco_events_settings_group') {
+        if (
+            isset($_POST['pco_events_license_key']) ||
+            (isset($_POST['pco_refresh_license_submit']) && sanitize_text_field($_POST['pco_refresh_license_submit']))
+        ) {
             $key = sanitize_text_field($_POST['pco_events_license_key']);
             if (function_exists('pco_events_validate_license_key')) {
                 $is_valid = pco_events_validate_license_key($key);

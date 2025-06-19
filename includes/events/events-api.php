@@ -7,7 +7,7 @@ require_once plugin_dir_path(__FILE__) . 'template.php';
 function fetch_pco_events_from_api($filter_tags = [], $limit = 0, $show_description = true) {
     $transient_key = 'pco_events_' . md5(serialize($filter_tags) . $limit . $show_description);
 
-    if (isset($_GET['refresh']) && $_GET['refresh'] === 'true') {
+    if (isset($_GET['refresh']) && sanitize_text_field($_GET['refresh']) === 'true') {
         delete_transient($transient_key);
     }
 
