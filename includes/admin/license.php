@@ -33,7 +33,7 @@ function pco_events_validate_license_key($license_key) {
         return $cached_status === 'valid';
     }
 
-    $site_url = home_url();
+    $site_url = preg_replace('/^www\./', '', parse_url(home_url(), PHP_URL_HOST));
     $url = 'https://pcointegrations.com/validate-license.php?key=' . urlencode($license_key) . '&site=' . urlencode($site_url);
     $response = wp_remote_get($url, ['timeout' => 10]);
 
@@ -71,6 +71,12 @@ add_action('admin_notices', function () {
     if (!current_user_can('manage_options')) return;
     $status = get_option('pco_events_license_status');
     if ($status !== 'valid') {
-        echo '<div class="notice notice-error"><p><strong>PCO Integrations Plugin:</strong> Your license key is invalid or missing. Please enter a valid license in <a href="' . esc_url(admin_url('options-general.php?page=pco-events-settings')) . '">plugin settings</a>.</p></div>';
+        $expires = get_option('pco_events_license_expires_at', '');
+        $expired = $expires && strtotime($expires) < time();
+        $message = $expired
+            ? 'Your license key has expired. Please renew it in <a href="' . esc_url(admin_url('options-general.php?page=pco-events-settings')) . '">plugin settings</a>.'
+            : 'Your license key is invalid or missing. Please enter a valid license in <a href="' . esc_url(admin_url('options-general.php?page=pco-events-settings')) . '">plugin settings</a>.';
+
+        echo '<div class="notice notice-error"><p><strong>PCO Integrations Plugin:</strong> ' . $message . '</p></div>';
     }
 });

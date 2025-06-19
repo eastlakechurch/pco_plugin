@@ -328,7 +328,7 @@ function pco_events_register_settings() {
 
     // Validate license key immediately after it's saved and update license status.
     if (is_admin() && isset($_POST['option_page']) && $_POST['option_page'] === 'pco_events_settings_group') {
-        if (isset($_POST['pco_events_license_key'])) {
+        if (isset($_POST['pco_events_license_key']) || isset($_POST['pco_refresh_license_submit'])) {
             $key = sanitize_text_field($_POST['pco_events_license_key']);
             if (function_exists('pco_events_validate_license_key')) {
                 $is_valid = pco_events_validate_license_key($key);
@@ -406,7 +406,16 @@ function pco_events_license_key_field_html() {
         $raw_expires = get_option('pco_events_license_expires_at', '');
         $expires = $raw_expires ? date('j F Y, g:ia', strtotime($raw_expires)) : 'Unknown';
         echo '<p style="color: green;"><strong>✔ Valid license.</strong> Expires: ' . esc_html($expires) . '</p>';
+
+        // Add Refresh License button
+        echo '<p><button type="submit" name="pco_refresh_license_submit" class="button">Refresh License</button></p>';
     } elseif ($status === 'invalid') {
-        echo '<p style="color: red;"><strong>✖ Invalid license key.</strong></p>';
+        $raw_expires = get_option('pco_events_license_expires_at', '');
+        $expired = $raw_expires && strtotime($raw_expires) < time();
+        $message = $expired
+            ? '<strong>✖ Your license has expired.</strong>'
+            : '<strong>✖ Invalid license key.</strong>';
+        echo '<p style="color: red;">' . $message . '</p>';
     }
+
 }
