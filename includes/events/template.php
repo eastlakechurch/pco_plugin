@@ -115,7 +115,16 @@ function pco_events_render_event_card($event_instance, $included = [], $show_des
     }
 
     if ($show_description && !empty($event_attrs['description'])) {
-        $output .= '<p>' . esc_html(strip_tags($event_attrs['description'])) . '</p>';
+        $desc = strip_tags($event_attrs['description']);
+
+        // Find and convert URLs to clickable links (with truncation)
+        $desc = preg_replace_callback('/https:\/\/[^\s]+/', function($matches) {
+            $url = $matches[0];
+            $display = strlen($url) > 40 ? substr($url, 0, 25) . '...' . substr($url, -6) : $url;
+            return '<a href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">' . esc_html($display) . '</a>';
+        }, $desc);
+
+        $output .= '<p>' . $desc . '</p>';
     }
 
     $output .= '</div>';

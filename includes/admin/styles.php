@@ -118,6 +118,16 @@ function pco_events_styles() {
             background-position: center;
         }
 
+        .events .event p a {
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: bottom;
+            word-break: break-all;
+        }
+
         .event-tags {
             margin: 10px 0;
         }

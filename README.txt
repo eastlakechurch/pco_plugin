@@ -1,10 +1,10 @@
 === PCO Integrations for WordPress ===
-Contributors: Joshua Edwards
-Tags: planning center, events, calendar, shortcode, church
+Contributors: joshedwards
+Tags: planning center, church, events, groups, sermons, shortcode
 Requires at least: 5.0
-Tested up to: 6.5
-Requires PHP: 7.2
-Stable tag: 1.0.0
+Tested up to: 6.8.1
+Requires PHP: 7.4
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,21 +12,20 @@ A premium plugin for displaying Planning Center Calendar events beautifully in W
 
 == Description ==
 
-**PCO Integrations for WordPress** is a powerful yet simple plugin built for churches using Planning Center Online (PCO). It pulls upcoming events from your Planning Center Calendar and displays them on your website using clean, modern layouts and flexible shortcode options.
+**PCO Integrations for WordPress** is a powerful plugin built for churches using Planning Center Online (PCO). It pulls upcoming Events, Groups, and Sermons from Planning Center and displays them on your website using clean shortcodes.
 
-Built with security and flexibility in mind, it includes encrypted credential storage, nonce protection for all sensitive actions, and full style customization to match your brand.
+Built with security and flexibility in mind, it includes encrypted credential storage, nonce protection, custom styles, license key validation, and responsive designs.
 
 == Features ==
 
-- Show upcoming events from Planning Center Calendar
-- Automatically filters out past events
-- Supports event tags for filtering and dynamic tag list in admin
-- Displays event images, descriptions, and start times
-- Recurring events show only the next instance with a clean, customisable label
-- Built-in caching with manual refresh button
-- Fully responsive design with customisable font, color, border, and image settings
-- Optional custom CSS field for advanced styling
-- Admin settings screen with credential encryption and secure license key handling
+- Display upcoming events from Planning Center Calendar
+- Automatically filters past events and detects recurring ones
+- Support for event tags, group types, and sermon episodes
+- Responsive display for Events, Groups, and Sermons
+- Built-in caching with manual refresh and ?refresh=true support
+- Full admin styling panel for fonts, colors, borders, and custom CSS
+- License key validation with refresh support and expiry checks
+- Credential encryption and secure API access
 
 == Installation ==
 
@@ -52,6 +51,14 @@ Place these shortcodes in any page, post, or widget:
 **Multiple Tags & Limit Count**
 [pco_featured_events tags="youth,camp" count="5"]
 
+**Groups Display**
+[pco_groups]
+
+**Sermons Display**
+[planning_centre_video]
+[planning_centre_title]
+[planning_centre_published]
+
 == Caching ==
 
 This plugin caches event data for performance. Use the “Refresh Event Cache” button in the settings to manually clear and update event data. During development or for URL-based cache clearing, append `?refresh=true` to your events page URL.
@@ -75,12 +82,39 @@ Yes! The plugin includes a full Styles tab with options for colors, font size, f
 
 == Changelog ==
 
+= 1.3.1 =
+* Added ability to enter url in event description
+* Fixed long text (url) extending beyond event card
+
+= 1.3.0 =
+* Added license refresh button
+* Improved license error feedback and expiry handling
+* Fixed Sermons shortcode bug where episodes were not displaying
+* Internal refactor for centralized enqueueing and shortcode loading
+
+= 1.2.2 =
+* Fixed: Group filter dropdowns (day/type/location) dynamically adjust based on available combinations
+* Events: Only display next instance of recurring events with “Recurring” label
+* General: Improved error handling and debug logging
+
+= 1.2.0 =
+* Added license validation and settings integration
+* Reorganized shortcode code into grouped includes
+* Enhanced Events and Groups shortcode compatibility
+
+= 1.1.0 =
+* Added Groups integration
+* Added Sermons shortcode for YouTube embed
+* Initial shortcode parameter support
+
 = 1.0.0 =
-* Initial public release
+* Initial public release with Planning Center Events integration
 
 == Disclaimer ==
 
 This plugin is not affiliated with or endorsed by Planning Center. Planning Center® is a registered trademark of Ministry Centered Technologies.
+
+This plugin is a third-party tool. Planning Center® is a registered trademark of Ministry Centered Technologies.
 
 == License ==
 
