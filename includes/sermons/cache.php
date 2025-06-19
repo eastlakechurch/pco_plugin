@@ -62,19 +62,6 @@ function pcp_update_latest_episode() {
 }
 
 /**
- * Get cached episode or fetch new one if not found or forced via ?pcp_nocache=1
- */
-function pcp_fetch_latest_episode() {
-    $episode = get_transient('pcp_latest_episode');
-
-    if ((isset($_GET['pcp_nocache']) && $_GET['pcp_nocache'] === '1') || $episode === false) {
-        return pcp_update_latest_episode();
-    }
-
-    return $episode;
-}
-
-/**
  * Manual update trigger via frontend URL.
  */
 function pcp_manual_update_trigger() {

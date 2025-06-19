@@ -386,6 +386,48 @@ function pco_events_register_settings() {
         'pco-sermons-settings',
         'pco_sermons_cache_section'
     );
+
+    // Autoplay toggle
+    add_settings_field(
+        'pco_sermons_autoplay',
+        'Enable Autoplay',
+        function() {
+            $value = get_option('pco_sermons_autoplay', 'yes');
+            echo '<select name="pco_sermons_autoplay">
+                <option value="yes"' . selected($value, 'yes', false) . '>Yes</option>
+                <option value="no"' . selected($value, 'no', false) . '>No</option>
+            </select>';
+            echo '<p class="description">Toggle whether the sermon video should autoplay when loaded.</p>';
+        },
+        'pco-sermons-settings',
+        'pco_sermons_cache_section'
+    );
+
+    // Autoplay delay
+    add_settings_field(
+        'pco_sermons_autoplay_delay',
+        'Autoplay Delay (s)',
+        function() {
+            $value = get_option('pco_sermons_autoplay_delay', '1');
+            echo '<input type="number" name="pco_sermons_autoplay_delay" value="' . esc_attr($value) . '" class="small-text">';
+            echo '<p class="description">Delay in seconds before autoplay starts (e.g., 1 = 1 second).</p>';
+        },
+        'pco-sermons-settings',
+        'pco_sermons_cache_section'
+    );
+
+    // Channel ID
+    add_settings_field(
+        'pco_sermons_channel_id',
+        'Planning Center Channel ID',
+        function() {
+            $value = get_option('pco_sermons_channel_id', '');
+            echo '<input type="text" name="pco_sermons_channel_id" value="' . esc_attr($value) . '" class="regular-text">';
+            echo '<p class="description">Optional. If set, ensures the plugin filters videos from this specific Planning Center channel.</p>';
+        },
+        'pco-sermons-settings',
+        'pco_sermons_cache_section'
+    );
 }
 
 function pco_username_field_html() {
