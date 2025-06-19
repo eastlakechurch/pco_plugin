@@ -422,3 +422,28 @@ function pco_events_license_key_field_html() {
     }
 
 }
+// --- SERMONS SETTINGS PAGE DISPLAY ---
+
+function pco_sermons_settings_page() {
+    ?>
+    <div class="wrap">
+        <h2>Planning Center – Sermons Settings</h2>
+        <?php if ($message = get_transient('pco_sermons_settings_success')) : ?>
+            <div id="message" class="updated notice is-dismissible">
+                <p><?php echo esc_html($message); ?></p>
+            </div>
+        <?php endif; ?>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('pco_sermons_settings_group');
+            do_settings_sections('pco-sermons-settings');
+            submit_button('Save Settings');
+            ?>
+        </form>
+        <form method="post">
+            <?php wp_nonce_field('pco_sermons_refresh_cache', 'pco_sermons_nonce'); ?>
+            <p><input type="submit" name="pco_sermons_refresh_cache" class="button" value="Refresh Sermons Cache Now"></p>
+        </form>
+    </div>
+    <?php
+}
