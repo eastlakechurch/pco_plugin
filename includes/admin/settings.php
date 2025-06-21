@@ -326,7 +326,7 @@ function pco_events_register_settings() {
         }
     }
 
-    // Validate license key immediately after it's saved and update license status.
+    // Validate license key immediately after it's saved and update license status/expiry.
     if (current_user_can('manage_options') && is_admin() && isset($_POST['option_page']) && sanitize_text_field($_POST['option_page']) === 'pco_events_settings_group') {
         if (
             isset($_POST['pco_events_license_key']) ||
@@ -334,9 +334,26 @@ function pco_events_register_settings() {
         ) {
             $key = sanitize_text_field($_POST['pco_events_license_key']);
             if (function_exists('pco_events_validate_license_key')) {
-                $is_valid = pco_events_validate_license_key($key);
-                error_log('License validated on save: ' . var_export($is_valid, true));
-                update_option('pco_events_license_status', $is_valid ? 'valid' : 'invalid');
+                // Force re-check of license (bypass any transient)
+                delete_transient('pco_events_license_status_cache');
+
+                $response = pco_events_validate_license_key($key, true); // true = force refresh
+
+                if (is_array($response)) {
+                    $status = $response['valid'] ? 'valid' : 'invalid';
+                    update_option('pco_events_license_status', $status);
+                    if (!empty($response['expires_at'])) {
+                        update_option('pco_events_license_expires_at', $response['expires_at']);
+                    }
+                } else {
+                    update_option('pco_events_license_status', 'invalid');
+                }
+
+                // --- Debug Logging ---
+                error_log('🧪 License Key Submitted: ' . $key);
+                error_log('🧪 Validation Response: ' . print_r($response, true));
+                error_log('🧪 Resulting License Status: ' . get_option('pco_events_license_status'));
+                error_log('🧪 License Expiry Stored: ' . get_option('pco_events_license_expires_at'));
             }
         }
     }
@@ -447,8 +464,10 @@ function pco_events_license_key_field_html() {
 
     // Real-time license validation display
     $status = get_option('pco_events_license_status');
+    error_log('🔍 License Status Retrieved: ' . $status);
     if ($status === 'valid') {
         $raw_expires = get_option('pco_events_license_expires_at', '');
+        error_log('📅 License Expiry Retrieved: ' . $raw_expires);
         $expires = $raw_expires ? date('j F Y, g:ia', strtotime($raw_expires)) : 'Unknown';
         echo '<p style="color: green;"><strong>✔ Valid license.</strong> Expires: ' . esc_html($expires) . '</p>';
 
@@ -456,6 +475,7 @@ function pco_events_license_key_field_html() {
         echo '<p><button type="submit" name="pco_refresh_license_submit" class="button">Refresh License</button></p>';
     } elseif ($status === 'invalid') {
         $raw_expires = get_option('pco_events_license_expires_at', '');
+        error_log('📅 License Expiry Retrieved: ' . $raw_expires);
         $expired = $raw_expires && strtotime($raw_expires) < time();
         $message = $expired
             ? '<strong>✖ Your license has expired.</strong>'
