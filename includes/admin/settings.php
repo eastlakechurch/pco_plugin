@@ -312,7 +312,12 @@ function pco_events_register_settings() {
     register_setting('pco_groups_style_settings_group', 'pco_groups_title_color');
     register_setting('pco_groups_style_settings_group', 'pco_groups_text_color');
 
-    if (is_admin() && isset($_GET['page']) && sanitize_text_field($_GET['page']) === 'pco-events-settings') {
+    if (
+        is_admin() &&
+        isset($_GET['page']) &&
+        sanitize_text_field($_GET['page']) === 'pco-events-settings' &&
+        !(isset($_POST['pco_refresh_license_submit']) || isset($_POST['pco_events_license_key']))
+    ) {
         $license_key = get_option('pco_events_license_key');
         $license_status = get_option('pco_events_license_status');
 

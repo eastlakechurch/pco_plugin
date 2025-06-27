@@ -176,6 +176,7 @@ function pco_events_settings_page() {
             echo '<div class="notice notice-warning"><p>Please enter your Planning Center API credentials and your license key to activate the plugin.</p></div>';
         } elseif (!empty($license)) {
             $is_valid = pco_events_validate_license_key($license);
+            set_transient('pco_license_notice_suppressed', true, 10);
             if ($is_valid) {
                 echo '<div class="notice notice-success"><p>License key is active.</p></div>';
             } else {
@@ -203,7 +204,7 @@ function pco_events_settings_page() {
         </form>
         <?php endif; ?>
 
-        <form method="post" action="">
+        <form method="post" action="<?php echo esc_url(admin_url('admin.php?page=pco-events-settings')); ?>">
     <?php wp_nonce_field('pco_events_refresh_cache', 'pco_events_nonce'); ?>
     <?php submit_button('Refresh Cache', 'secondary', 'pco_refresh_cache'); ?>
 </form>
@@ -501,7 +502,7 @@ function pco_events_shortcode_generator_page() {
 add_action('admin_init', function() {
     if (
         isset($_POST['pco_refresh_cache']) &&
-        check_admin_referer('pco_events_refresh_cache', sanitize_text_field($_POST['pco_events_nonce']))
+        check_admin_referer('pco_events_refresh_cache', 'pco_events_nonce')
     ) {
         // Clear event cache (existing logic, if any)
         global $wpdb;

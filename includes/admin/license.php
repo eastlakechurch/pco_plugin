@@ -64,18 +64,26 @@ function pco_events_validate_license_key($license_key) {
 add_action('add_option_pco_events_license_key', function($option, $value) {
     if (!empty($value) && function_exists('pco_events_validate_license_key')) {
         pco_events_validate_license_key($value);
+        set_transient('pco_license_notice_suppressed', true, 10);
     }
 }, 10, 2);
 
 add_action('update_option_pco_events_license_key', function($old_value, $new_value) {
     if (!empty($new_value) && function_exists('pco_events_validate_license_key')) {
         pco_events_validate_license_key($new_value);
+        set_transient('pco_license_notice_suppressed', true, 10);
     }
 }, 10, 2);
 
 // Display admin notice if license is invalid
 add_action('admin_notices', function () {
     if (!current_user_can('manage_options')) return;
+
+    // Check if we just refreshed or saved the license recently
+    if (get_transient('pco_license_notice_suppressed')) {
+        return;
+    }
+
     $status = get_option('pco_events_license_status');
     if ($status !== 'valid') {
         $expires = get_option('pco_events_license_expires_at', '');
