@@ -16,14 +16,9 @@ function pco_events_license_message() {
 require_once plugin_dir_path(__FILE__) . 'template.php';
 
 function pco_events_all($atts) {
-    $license_status = get_option('pco_events_license_status');
-    error_log('License status on shortcode render (all): ' . $license_status);
-
-    if ($license_status !== 'valid') {
-        return pco_events_license_message();
-    }
 
     $atts = shortcode_atts([
+        'count' => '25',
         'show_description' => 'true',
         'show_image' => 'true',
         'show_tags' => 'true',
@@ -33,17 +28,12 @@ function pco_events_all($atts) {
     $show_image = ($atts['show_image'] !== 'false');
     $show_tags = ($atts['show_tags'] !== 'false');
 
-    return fetch_pco_events_from_api([], 0, $show_desc, $show_image, $show_tags);
+    $count = isset($atts['count']) ? intval($atts['count']) : 25;
+    return fetch_pco_events_from_api([], $count, $show_desc, $show_image, $show_tags);
 }
 add_shortcode('pco_events', 'pco_events_all');
 
 function pco_events_featured($atts) {
-    $license_status = get_option('pco_events_license_status');
-    error_log('License status on shortcode render (featured): ' . $license_status);
-
-    if ($license_status !== 'valid') {
-        return pco_events_license_message();
-    }
 
     $atts = shortcode_atts([
         'tags' => 'featured',
@@ -63,10 +53,6 @@ function pco_events_featured($atts) {
 add_shortcode('pco_featured_events', 'pco_events_featured');
 
 function pco_events_single($atts) {
-    $license_status = get_option('pco_events_license_status');
-    if ($license_status !== 'valid') {
-        return pco_events_license_message();
-    }
 
     $atts = shortcode_atts([
         'id' => '',

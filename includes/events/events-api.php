@@ -21,89 +21,80 @@ function fetch_pco_events_from_api($filter_tags = [], $limit = 0, $show_descript
 
     $url = 'https://api.planningcenteronline.com/calendar/v2/event_instances?include=event,event.tags,event.tag_group_tags,event.tag_groups&order=start_at&where[after]=' . urlencode(date('c'));
 
-    $response = wp_remote_get($url, [
-        'headers' => [
-            'Authorization' => 'Basic ' . base64_encode("$username:$password"),
-        ]
-    ]);
-
-    if (is_wp_error($response)) {
-        return '<p>Could not load events.</p>';
-    }
-
-    $data = json_decode(wp_remote_retrieve_body($response), true);
-    $output = '<div class="events">';
-    $count = 0;
     $seen_event_ids = [];
-
     $events = [];
     $tags = [];
+    $output = '<div class="events">';
+    $count = 0;
 
-    if (!empty($data['included'])) {
-        foreach ($data['included'] as $item) {
-            if ($item['type'] === 'Event') {
-                $events[$item['id']] = $item;
-            } elseif ($item['type'] === 'Tag' || $item['type'] === 'TagGroupTag') {
-                $tags[$item['id']] = $item['attributes']['name'];
-            }
-        }
-    }
+    while ($url && ($limit === 0 || $count < $limit)) {
+        $response = wp_remote_get($url, [
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode("$username:$password"),
+            ]
+        ]);
 
-    // Get saved timezone option and create DateTimeZone object if available
-    $timezone = get_option('pco_events_local_timezone');
-    if (!empty($timezone)) {
-        try {
-            $tz_object = new DateTimeZone($timezone);
-        } catch (Exception $e) {
-            $tz_object = null;
-        }
-    } else {
-        $tz_object = null;
-    }
-
-    foreach ($data['data'] as $event_instance) {
-        $attributes = $event_instance['attributes'];
-
-        if (strtotime($attributes['starts_at']) < time()) {
-            continue;
+        if (is_wp_error($response)) {
+            return '<p>Could not load events.</p>';
         }
 
-        $event_id = $event_instance['relationships']['event']['data']['id'];
-        if (in_array($event_id, $seen_event_ids)) {
-            continue;
-        }
-        $seen_event_ids[] = $event_id;
+        $data = json_decode(wp_remote_retrieve_body($response), true);
 
-        $event = isset($events[$event_id]) ? $events[$event_id] : null;
-        if (!$event) continue;
-
-        $event_attrs = $event['attributes'];
-        $event_tags = [];
-        if (!empty($event['relationships']['tags']['data'])) {
-            foreach ($event['relationships']['tags']['data'] as $tag_ref) {
-                $tag_id = $tag_ref['id'];
-                if (isset($tags[$tag_id])) {
-                    $event_tags[] = $tags[$tag_id];
+        if (!empty($data['included'])) {
+            foreach ($data['included'] as $item) {
+                if ($item['type'] === 'Event') {
+                    $events[$item['id']] = $item;
+                } elseif ($item['type'] === 'Tag' || $item['type'] === 'TagGroupTag') {
+                    $tags[$item['id']] = $item['attributes']['name'];
                 }
             }
         }
 
-        if (!empty($filter_tags)) {
-            $matched = false;
-            foreach ($event_tags as $et) {
-                if (in_array(strtolower($et), array_map('strtolower', $filter_tags))) {
-                    $matched = true;
-                    break;
+        foreach ($data['data'] as $event_instance) {
+            $attributes = $event_instance['attributes'];
+
+            if (strtotime($attributes['starts_at']) < time()) {
+                continue;
+            }
+
+            $event_id = $event_instance['relationships']['event']['data']['id'];
+            if (in_array($event_id, $seen_event_ids)) {
+                continue;
+            }
+            $seen_event_ids[] = $event_id;
+
+            $event = isset($events[$event_id]) ? $events[$event_id] : null;
+            if (!$event) continue;
+
+            $event_attrs = $event['attributes'];
+            $event_tags = [];
+            if (!empty($event['relationships']['tags']['data'])) {
+                foreach ($event['relationships']['tags']['data'] as $tag_ref) {
+                    $tag_id = $tag_ref['id'];
+                    if (isset($tags[$tag_id])) {
+                        $event_tags[] = $tags[$tag_id];
+                    }
                 }
             }
-            if (!$matched) continue;
+
+            if (!empty($filter_tags)) {
+                $matched = false;
+                foreach ($event_tags as $et) {
+                    if (in_array(strtolower($et), array_map('strtolower', $filter_tags))) {
+                        $matched = true;
+                        break;
+                    }
+                }
+                if (!$matched) continue;
+            }
+
+            $output .= pco_events_render_event_card($event_instance, $data['included'], $show_description);
+
+            $count++;
+            if ($limit > 0 && $count >= $limit) break;
         }
 
-        // Instead of duplicating HTML, use the shared function:
-        $output .= pco_events_render_event_card($event_instance, $data['included'], $show_description);
-
-        $count++;
-        if ($limit > 0 && $count >= $limit) break;
+        $url = $data['links']['next'] ?? null;
     }
 
     $output .= '</div>';

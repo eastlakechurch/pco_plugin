@@ -16,7 +16,8 @@ function pcp_license_message() {
  * Outputs the video player for the latest sermon episode.
  */
 function pcp_video_shortcode() {
-    if (get_option('pco_events_license_status') !== 'valid') {
+    $license_status = get_option('pco_sermons_license_status');
+    if ($license_status !== 'valid') {
         return pcp_license_message();
     }
 
@@ -35,7 +36,8 @@ add_shortcode('planning_centre_video', 'pcp_video_shortcode');
  * Outputs the title for the latest sermon episode.
  */
 function pcp_title_shortcode() {
-    if (get_option('pco_events_license_status') !== 'valid') {
+    $license_status = get_option('pco_sermons_license_status');
+    if ($license_status !== 'valid') {
         return pcp_license_message();
     }
 
@@ -54,7 +56,8 @@ add_shortcode('planning_centre_title', 'pcp_title_shortcode');
  * Outputs the formatted published date for the latest sermon episode.
  */
 function pcp_published_shortcode() {
-    if (get_option('pco_events_license_status') !== 'valid') {
+    $license_status = get_option('pco_sermons_license_status');
+    if ($license_status !== 'valid') {
         return pcp_license_message();
     }
 

@@ -9,7 +9,7 @@ function pco_groups_license_message() {
 add_shortcode('pco_groups', 'pco_groups_shortcode');
 
 function pco_groups_shortcode($atts) {
-    $license_status = get_option('pco_events_license_status');
+    $license_status = get_option('pco_groups_license_status');
     if ($license_status !== 'valid') {
         return pco_groups_license_message();
     }
@@ -157,7 +157,7 @@ function pco_groups_shortcode($atts) {
 add_shortcode('pco_integrations_groups', 'pco_integrations_groups_shortcode');
 
 function pco_integrations_groups_shortcode($atts) {
-    $license_status = get_option('pco_events_license_status');
+    $license_status = get_option('pco_groups_license_status');
     if ($license_status !== 'valid') {
         return pco_groups_license_message();
     }

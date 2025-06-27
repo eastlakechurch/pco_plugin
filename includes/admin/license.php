@@ -32,15 +32,15 @@ function pco_events_validate_license_key($license_key) {
 
 
     $site_url = preg_replace('/^www\./', '', parse_url(home_url(), PHP_URL_HOST));
-    $url = 'https://pcointegrations.com/pco-validate-license.php?key=' . urlencode($license_key) . '&site=' . urlencode($site_url);
+    $url = 'https://pcointegrations.com/lic.php?key=' . urlencode($license_key) . '&site=' . urlencode($site_url);
     $response = wp_remote_get($url, ['timeout' => 10]);
-    error_log('License Validation Request URL: ' . $url);
+    error_log('🌐 License Validation Request URL: ' . $url);
 
     if (is_wp_error($response)) {
         return false;
     }
 
-    error_log('Raw JSON Body: ' . wp_remote_retrieve_body($response));
+    error_log('📦 Raw JSON Body: ' . wp_remote_retrieve_body($response));
     $body = json_decode(wp_remote_retrieve_body($response), true);
     error_log('PCO License Validation Response: ' . print_r($body, true));
     $is_valid = isset($body['valid']) && filter_var($body['valid'], FILTER_VALIDATE_BOOLEAN);
@@ -55,8 +55,8 @@ function pco_events_validate_license_key($license_key) {
     update_option('pco_events_license_status', $is_valid ? 'valid' : 'invalid');
     set_transient('pco_events_license_status_cache', $is_valid ? 'valid' : 'invalid', DAY_IN_SECONDS);
 
-    error_log('Stored License Status: ' . ($is_valid ? 'valid' : 'invalid'));
-    error_log('Stored License Expiry: ' . $expires_at);
+    error_log('✅ Stored License Status: ' . ($is_valid ? 'valid' : 'invalid'));
+    error_log('📅 Stored License Expiry: ' . $expires_at);
 
     return $is_valid;
 }
