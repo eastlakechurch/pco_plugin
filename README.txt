@@ -4,7 +4,7 @@ Tags: planning center, church, events, groups, sermons, shortcode
 Requires at least: 5.0
 Tested up to: 6.8.1
 Requires PHP: 7.4
-Stable tag: 1.3.9
+Stable tag: 1.3.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,9 @@ Your Planning Center credentials are securely encrypted before being saved to yo
 Yes! The plugin includes a full Styles tab with options for colors, font size, font family, border strength, image corner styling, and custom CSS.
 
 == Changelog ==
+
+= 1.3.10 =
+* Fixed bug where invalid license was showing after refresh or settings save.
 
 = 1.3.2 =
 * Refactored sermons structure to follow modular design
