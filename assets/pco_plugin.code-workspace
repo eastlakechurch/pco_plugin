@@ -9,6 +9,10 @@
 		},
 		{
 			"path": "../../pco_license"
+		},
+		{
+			"name": "pco_kids",
+			"path": "../../pco_kids"
 		}
 	],
 	"settings": {}
